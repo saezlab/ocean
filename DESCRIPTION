@@ -1,0 +1,17 @@
+Package: ocean
+Type: Package
+Title: metabolic enzyme enrichment analysis
+Version: 0.1.0
+Authors@R: c(
+    person(given = "Aurélien",
+           family = "Dugourd",
+           role = c("cre", "aut"),
+           email = "dugourdaurelien@gmail.com",
+           comment = c(ORCID = "0000-0002-0714-028X")))
+Maintainer: Aurelien Dugourd <dugourdaurelien@gmail.com>
+Description: metabolic enzyme enrichment analysis
+    Based on the model of TF and kinase activity estimation
+License: GPL-3 + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
