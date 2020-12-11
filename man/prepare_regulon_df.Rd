@@ -2,18 +2,20 @@
 % Please edit documentation in R/metactivity_core_functions.R
 \name{prepare_regulon_df}
 \alias{prepare_regulon_df}
-\title{condense_metabolite_set}
+\title{prepare_regulon_df}
 \usage{
 prepare_regulon_df(reaction_set_list_merged, penalty)
 }
 \arguments{
-\item{reaction_set_list_merged}{ipsum...}
+\item{reaction_set_list_merged}{a metabolic-enzyme set collections, 
+as returned by the condense_metabolite_set function}
 
-\item{penalty}{ipsum...}
+\item{penalty}{numeric, the index of the reaction_set_list_merged corresponding to
+the desired penalty}
 }
 \value{
-ipsum...
+a regulon dataframe with three columns correposning to the enzme, the target metabolite and the weight
 }
 \description{
-ipsum...
+extract and cleanup the regulon collection correpsonding to the desired penalty
 }

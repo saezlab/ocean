@@ -22,7 +22,7 @@ penalty_min <- 6 #minimum 1 and integer
 penalty_max <- 6 #maximum 9 and integer
 
 reaction_set_list <- prepare_metabolite_set(penalty_range = penalty_min:penalty_max, 
-                                            reaction_tree = tree_without_cofactors,
+                                            forest = tree_without_cofactors,
                                             metab_list = t_table$KEGG)
 
 reaction_set_list_merged <- condense_metabolite_set(reaction_set_list = reaction_set_list)

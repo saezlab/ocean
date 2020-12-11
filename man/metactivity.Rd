@@ -24,5 +24,6 @@ metactivity(
 ipsum...
 }
 \description{
-Thsi is where the fun happens
+Use a mean enrichement statistic with shuffling-based normalisation (preserving metabolic compartment information)
+to compute the metabolic enzme normalised enrichment score, based on its upstream and downstream metabolites
 }

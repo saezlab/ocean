@@ -7,17 +7,18 @@
 target_set_from_forest_2(forest, measured_species, penalty = 0.5, verbose = T)
 }
 \arguments{
-\item{forest}{ipsum...}
+\item{forest}{a forest representation of a metabolic network. can be used with the tree_without_cofactor}
 
-\item{measured_species}{ipsum...}
+\item{measured_species}{character vector, the names of the metabolites that are measured. 
+Must be coherents with identifers in forest}
 
-\item{penalty}{ipsum...}
+\item{penalty}{numeric, the penalty, between 0.1 and 0.9 (0 and 1 work as well but are special cases and shouldn't be used)}
 
-\item{verbose}{ipsum...}
+\item{verbose}{boolean, to display progress}
 }
 \value{
-ipsum...
+a reaction network in the form of a three column dataframe with enzme, metabolite targets and weights.
 }
 \description{
-ipsum...
+this function converts a 'forest' representation of a metabolic network into a metabolic-enzyme set
 }

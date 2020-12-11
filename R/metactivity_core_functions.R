@@ -1,13 +1,13 @@
 #' target_set_from_forest_2
 #'
-#' ipsum...
+#' this function converts a 'forest' representation of a metabolic network into a metabolic-enzyme set
 #'
-#' @param forest  ipsum...
-#' @param measured_species ipsum...
-#' @param penalty ipsum...
-#' @param verbose ipsum...
-#' @export
-#' @return ipsum...
+#' @param forest  a forest representation of a metabolic network. can be used with the tree_without_cofactor
+#' @param measured_species character vector, the names of the metabolites that are measured. 
+#' Must be coherents with identifers in forest
+#' @param penalty numeric, the penalty, between 0.1 and 0.9 (0 and 1 work as well but are special cases and shouldn't be used)
+#' @param verbose boolean, to display progress
+#' @return a reaction network in the form of a three column dataframe with enzme, metabolite targets and weights.
 target_set_from_forest_2 <- function(forest, measured_species, penalty = 0.5, verbose = T)
 {
   target_set <- list()
@@ -55,38 +55,40 @@ target_set_from_forest_2 <- function(forest, measured_species, penalty = 0.5, ve
 
 #' prepare_metabolite_set
 #'
-#' ipsum...
+#' This functions create a series of metabolic-enzyme set collections over a range of penalties
+#' (see tutorial)
 #'
-#' @param penalty_range  ipsum...
-#' @param reaction_tree ipsum...
-#' @param metab_list ipsum...
-#' @return ipsum...
+#' @param penalty_range  numeric vector, between minimum 1 and maximum 9
+#' @param forest list, a forest representation of a metabolic network. 
+#' @param measured_metabolites character vector, names of measured metabolites
+#' @return a series of metabolic-enzyme set collections
 #' @export
-prepare_metabolite_set <- function(penalty_range, reaction_tree, metab_list)
+prepare_metabolite_set <- function(penalty_range, forest, measured_metabolites)
 {
   reaction_set_list <- list()
   for(i in penalty_range)
   {
     print(i)
     pen <- i/10
-    reaction_set_list[[i]] <- target_set_from_forest_2(reaction_tree, metab_list, penalty = pen)
+    reaction_set_list[[i]] <- target_set_from_forest_2(forest, measured_metabolites, penalty = pen)
   }
   return(reaction_set_list)
 }
 
 #' condense_metabolite_set
 #'
-#' ipsum...
+#' this function condense the metabolic-enzyme set collections to summarise ignore specific types of
+#' information such as compartments of relative positions (sign)
 #'
-#' @param reaction_set_list  ipsum...
-#' @param condense_sign ipsum...
-#' @param condense_compartments ipsum...
-#' @param ignore_sign ipsum...
-#' @return ipsum...
+#' @param reaction_set_list  list, metabolic-enzyme set collections as returned by the prepare_metabolite_set function
+#' @param condense_sign boolean, summarise upstream and downstream position of metabolites into a signle relative position
+#' @param condense_compartments boolean, wether the compartment information of hte metabolic network sohuld be ignored
+#' @param ignore_sign boolean, wether the upstream/downstream position of metabolic should be ignored 
+#' @return a metabolic-enzyme set collections
 #' @export
 #' @import dplyr
 #' @import magrittr
-condense_metabolite_set <- function(reaction_set_list, condense_sign = T, condense_compartments = T, ignore_sign = F)
+condense_metabolite_set <- function(reaction_set_list, condense_sign = T, condense_compartments = F, ignore_sign = F)
 {
   reaction_set_list_merged <- list()
   for(i in 1:length(reaction_set_list))
@@ -127,19 +129,20 @@ condense_metabolite_set <- function(reaction_set_list, condense_sign = T, conden
   return(reaction_set_list_merged)
 }
 
-#' condense_metabolite_set
+#' prepare_regulon_df
 #'
-#' ipsum...
+#' extract and cleanup the regulon collection correpsonding to the desired penalty
 #'
-#' @param reaction_set_list_merged  ipsum...
-#' @param penalty ipsum...
-#' @return ipsum...
+#' @param reaction_set_list_merged  a metabolic-enzyme set collections, 
+#' as returned by the condense_metabolite_set function
+#' @param penalty numeric, the index of the reaction_set_list_merged corresponding to
+#' the desired penalty
+#' @return a regulon dataframe with three columns correposning to the enzme, the target metabolite and the weight
 #' @export
 prepare_regulon_df <- function(reaction_set_list_merged, penalty)
 {
   n <- length(unique(reaction_set_list_merged[[penalty]][,1]))
 
-  regulonNames = unique(reaction_set_list_merged[[penalty]][,1])[1:n]
   regulons_df <- reaction_set_list_merged[[penalty]]
 
   regulons_df <- regulons_df[regulons_df[,1] %in% unique(regulons_df[,1])[1:n],]
@@ -150,7 +153,8 @@ prepare_regulon_df <- function(reaction_set_list_merged, penalty)
 
 #' metactivity
 #'
-#' Thsi is where the fun happens
+#' Use a mean enrichement statistic with shuffling-based normalisation (preserving metabolic compartment information)
+#' to compute the metabolic enzme normalised enrichment score, based on its upstream and downstream metabolites
 #'
 #' @param metabolomic_t_table  ipsum...
 #' @param regulons_df ipsum...

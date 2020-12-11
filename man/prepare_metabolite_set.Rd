@@ -4,18 +4,19 @@
 \alias{prepare_metabolite_set}
 \title{prepare_metabolite_set}
 \usage{
-prepare_metabolite_set(penalty_range, reaction_tree, metab_list)
+prepare_metabolite_set(penalty_range, forest, measured_metabolites)
 }
 \arguments{
-\item{penalty_range}{ipsum...}
+\item{penalty_range}{numeric vector, between minimum 1 and maximum 9}
 
-\item{reaction_tree}{ipsum...}
+\item{forest}{list, a forest representation of a metabolic network.}
 
-\item{metab_list}{ipsum...}
+\item{measured_metabolites}{character vector, names of measured metabolites}
 }
 \value{
-ipsum...
+a series of metabolic-enzyme set collections
 }
 \description{
-ipsum...
+This functions create a series of metabolic-enzyme set collections over a range of penalties
+(see tutorial)
 }

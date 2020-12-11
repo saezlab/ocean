@@ -7,22 +7,23 @@
 condense_metabolite_set(
   reaction_set_list,
   condense_sign = T,
-  condense_compartments = T,
+  condense_compartments = F,
   ignore_sign = F
 )
 }
 \arguments{
-\item{reaction_set_list}{ipsum...}
+\item{reaction_set_list}{list, metabolic-enzyme set collections as returned by the prepare_metabolite_set function}
 
-\item{condense_sign}{ipsum...}
+\item{condense_sign}{boolean, summarise upstream and downstream position of metabolites into a signle relative position}
 
-\item{condense_compartments}{ipsum...}
+\item{condense_compartments}{boolean, wether the compartment information of hte metabolic network sohuld be ignored}
 
-\item{ignore_sign}{ipsum...}
+\item{ignore_sign}{boolean, wether the upstream/downstream position of metabolic should be ignored}
 }
 \value{
-ipsum...
+a metabolic-enzyme set collections
 }
 \description{
-ipsum...
+this function condense the metabolic-enzyme set collections to summarise ignore specific types of
+information such as compartments of relative positions (sign)
 }
