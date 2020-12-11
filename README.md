@@ -13,7 +13,7 @@ install.packages("devtools")
 
 ## instal COSMOS
 library(devtools)
-install_github("saezlab/COSMOS")
+install_github("saezlab/ocean")
 ```
 
 You can then run the tutorial scripts with a kidney cancer toy metabolomic dataset: https://github.com/saezlab/ocean/blob/master/tutorial.R
