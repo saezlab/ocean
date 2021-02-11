@@ -187,6 +187,23 @@ metactivity <- function(metabolomic_t_table, regulons_df, compartment_pattern = 
       t_table_with_null <- t_table_with_null[,-1]
       row.names(t_table_with_null) <- t_table_with_null[,1]
       t_table_with_null <- t_table_with_null[,-1]
+    } else
+    {
+      t_table <- metabolomic_t_table
+      t_table$unique_metab <- metabolomic_t_table[,1]
+      t_table_reduced <- t_table[,c(length(t_table[1,]),2:(length(t_table[1,])-1))]
+      t_table_reduced <- unique(t_table_reduced)
+      
+      t_null <- as.data.frame(replicate(k, sample(t_table_reduced[,i], length(t_table_reduced[,i]))))
+      t_null <- as.data.frame(cbind(t_table_reduced[,1],t_null))
+      names(t_null)[1] <- names(t_table_reduced)[1]
+      
+      t_table_with_null <- merge(t_table[,c(1,i,length(t_table[1,]))],
+                                 t_null,
+                                 by = names(t_table_reduced)[1])
+      t_table_with_null <- t_table_with_null[,-1]
+      row.names(t_table_with_null) <- t_table_with_null[,1]
+      t_table_with_null <- t_table_with_null[,-1]
     }
 
     regulons_df <- regulons_df[regulons_df[,2] %in% row.names(t_table_with_null),]
