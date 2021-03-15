@@ -2,18 +2,19 @@
 % Please edit documentation in R/limma_aux_functions.R
 \name{makeContrastsAlt}
 \alias{makeContrastsAlt}
-\title{makeContrastsAlt}
+\title{\code{makeContrastsAlt}}
 \usage{
 makeContrastsAlt(targets, comparisons)
 }
 \arguments{
-\item{targets}{ipsum...}
+\item{targets}{A n*2 dataframe, where n is the number of samples. First column correspond to samples, second column correspond to conditions.}
 
-\item{comparisons}{ipsum...}
+\item{comparisons}{a list of numeric vectors. Each vector represent which condition should be conpared. Example :
+c(2,-1) means that the first condition should be substracted from second condition. Vectors can be more than two element for complex contrasts.}
 }
 \value{
-ipsum...
+a contrast matrix
 }
 \description{
-ipsum...
+This function create a contrast matrix to be used by limma.
 }

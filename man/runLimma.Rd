@@ -2,22 +2,24 @@
 % Please edit documentation in R/limma_aux_functions.R
 \name{runLimma}
 \alias{runLimma}
-\title{runLimma}
+\title{\code{runLimma}}
 \usage{
 runLimma(measurements, targets, comparisons = NULL, regress_out = NULL)
 }
 \arguments{
-\item{targets}{ipsum...}
+\item{targets}{A n*2 dataframe, where n is the number of samples. First column correspond to samples, second column correspond to conditions.}
 
-\item{comparisons}{ipsum...}
+\item{comparisons}{a list of numeric vectors. Each vector represent which condition should be conpared. Example :
+c(2,-1) means that the first condition should be substracted from second condition. Vectors can be more than two element for complex contrasts.}
 
-\item{regress_out}{ipsum...}
+\item{regress_out}{in case the user which to exclude possible confounding factors from the analysis, the user can provide additional columns in the targets dataframe.
+then, the confounding factor can be regressed out by indicating the number of the column of the target dataframe describing it. Only one factor can be regressed out at the present time.}
 
-\item{measurments}{ipsum...}
+\item{measurments}{the measurment n*m dataframe (n is number of omic features, m is number of samples) where columns are ordered by conditions.}
 }
 \value{
-ipsum...
+a list. First element is the limma model fitted with the contrast matrix, this is the usual output of limma. Second element is the contrast matrix that was used. third element is the fitted limma object without contrasts.
 }
 \description{
-ipsum...
+This function is a wrapper of limma made to facilitate the use of limma differential analysis
 }
