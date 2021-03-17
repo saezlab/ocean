@@ -208,6 +208,14 @@ model_to_pathway_sif <- function(pathway_to_keep,
           new_reaction_df[1:length(reactants),1] <- reactants
           new_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),2] <- products
           
+          if(length(reactants) == length(products)) #this should fix the rare cases were the order or products was inverted
+          {
+            if(sum(gsub("_[cxrnme]","",reactants) == gsub("_[cxrnme]","",products)) != length(reactants))
+            {
+              new_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),2] <- products[length(products):1]
+            }
+          }
+          
           reverse_reaction_df <- new_reaction_df
           reverse_reaction_df[1:length(reactants),2] <- paste(reverse_reaction_df[1:length(reactants),2],"_reverse",sep = "")
           reverse_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1] <- paste(reverse_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1],"_reverse",sep = "")
@@ -328,6 +336,14 @@ model_to_pathway_sif <- function(pathway_to_keep,
   
   row.names(reactions_df) <- c(1:length(reactions_df[,1]))
   
+  if("Urea cycle" %in% pathway_to_keep)
+  {
+    reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Urea cycle"]]))
+  }
+  if("Purine synthesis" %in% pathway_to_keep)
+  {
+    reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Purine synthesis"]]))
+  }
   ###
   return(reactions_df)
 }
@@ -363,10 +379,10 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
   {
     
     brite <- compound$BRITE
-    if(!is.null(brite) & !is.null(compound$NAME) & !is.null(compound$ATOM))
+    if(!is.null(compound$ATOM))
     {
       brite <- gsub("[ ]+","",brite)
-      if("Cofactors" %in% brite | "Nucleotides" %in% brite | "CO2;" %in% compound$NAME | as.numeric(compound$ATOM[1]) <= 3 | "ITP;" %in% compound$NAME | "IDP;" %in% compound$NAME | "NADH;" %in% compound$NAME)
+      if("Cofactors" %in% brite | "Nucleotides" %in% brite | "CO2;" %in% compound$NAME | as.numeric(compound$ATOM[1]) <= 3 | "ITP;" %in% compound$NAME | "IDP;" %in% compound$NAME | "NADH;" %in% compound$NAME | "NADPH;" %in% compound$NAME)
       {
         bad_kegg_compounds[[compound$ENTRY[1]]] <- compound
       }
@@ -392,6 +408,7 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
   bad_compounds <- as.data.frame(rbind(bad_compounds,c("cpd:C00013_m","cpd:C00013")))
   bad_compounds <- as.data.frame(rbind(bad_compounds,c("cpd:C00009_c","cpd:C00009")))
   bad_compounds <- as.data.frame(rbind(bad_compounds,c("cpd:C00009_m","cpd:C00009")))
+  bad_compounds <- as.data.frame(rbind(bad_compounds,c("cpd:C00009_r","cpd:C00009")))
   
   reaction_network_no_cofact <- reaction_network[
     !(reaction_network$source %in% bad_compounds$compounds_compartment) & 
@@ -412,4 +429,89 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
   node_attributes[node_attributes[,1] %in% compounds$compounds_compartment,2] <- "metabolite"
   
   return(list("reaction_network" = reaction_network_no_cofact, "attributes" = node_attributes))
+}
+
+#'\code{compress_transporters}
+#'
+#' This function removes cofactors from reaction networks generate by the model_to_pathway_sif function
+#'
+#' @param sub_network_nocofact  ipsum...
+#' @return ipsum...
+#' @export
+compress_transporters <- function(sub_network_nocofact)
+{
+  test_1 <- paste(gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$source), 
+                  gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$target),
+                  sep = "_")
+  
+  test_2 <- paste(gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$target), 
+                  gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$source),
+                  sep = "_")
+  
+  test_1[test_1 %in% test_2]
+  
+  transporters <- unique(c(sub_network_nocofact$reaction_network[test_1 %in% test_2,1], sub_network_nocofact$reaction_network[test_1 %in% test_2,2]))
+  transporters <- transporters[!grepl("_[cxrnme]$",transporters)]
+  
+  for(i in 1:2)
+  {
+    sub_network_nocofact$reaction_network[,i] <- sapply(sub_network_nocofact$reaction_network[,i], function(x, transporters){
+      if(x %in% transporters)
+      {
+        return("transporter")
+      } else
+      {
+        return(x)
+      }
+    }, transporters = transporters)
+  }
+  
+  sub_network_nocofact$reaction_network$edgeId <- paste(sub_network_nocofact$reaction_network$source, sub_network_nocofact$reaction_network$target, sep = "_")
+  sub_network_nocofact$reaction_network <- sub_network_nocofact$reaction_network[!duplicated(sub_network_nocofact$reaction_network$edgeId),]
+  
+  edge_transporter <- sub_network_nocofact$reaction_network$edgeId
+  edge_transporter <- edge_transporter[grepl("transporter",edge_transporter)]
+  
+  groups <- rep(0,length(edge_transporter))
+  for(i in 1:length(edge_transporter))
+  {
+    if(grepl("^cpd:",edge_transporter[i]) | grepl("_[cxrnme]_",edge_transporter[i]))
+    {
+      metab <- gsub("_.*","",edge_transporter[i])
+      for(j in 1:length(edge_transporter))
+      {
+        if(grepl("^transporter",edge_transporter[j]))
+        {
+          if(grepl(metab, edge_transporter[j]) & gsub("_transporter","",edge_transporter[i]) != gsub("transporter_","",edge_transporter[j]))
+          {
+            groups[i] <- i
+            groups[j] <- i
+          }
+        }
+      }
+    }
+  }
+  
+  names(groups) <- edge_transporter
+  
+  network <- sub_network_nocofact$reaction_network
+  for(i in 1:2)
+  {
+    for(j in 1:length(network[,i]))
+    {
+      if(network[j,i] == "transporter")
+      {
+        print(network[j,3])
+        network[j,i] <- paste(network[j,i], groups[network[j,3]], sep = ">")
+      }
+    }  
+  }
+  
+  network <- network[!grepl("^SLC",network$edgeId) & !grepl("_SLC",network$edgeId),]
+  
+  sub_network_nocofact$reaction_network <- network[,-3]
+  
+  sub_network_nocofact$attributes <- sub_network_nocofact$attributes[sub_network_nocofact$attributes[,1] %in% network[,1] | sub_network_nocofact$attributes[,1] %in% network[,2],]
+  
+  return(sub_network_nocofact)
 }
