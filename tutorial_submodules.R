@@ -23,13 +23,32 @@ penalty_max <- 6 #maximum 9 and integer
 
 View(unique(recon2_redhuman$pathway))
 
-TCA_network <- model_to_pathway_sif(pathway_to_keep = "Citric acid cycle") #or c("Citric acid cycle", "Pyruvate metabolism", ...) for multiple pathway combinaison
+##Select pathways relevant to include in network
+TCA_network <- model_to_pathway_sif(pathway_to_keep = c("Citric acid cycle",
+                                                        "Glycolysis/gluconeogenesis",
+                                                        "Pyruvate metabolism",
+                                                        "Transport, mitochondrial"))
+
 TCA_network_nocofact <- remove_cofactors(TCA_network)
+
+##This is to simplify the network sutrcture by compressing redundant transporters
+TCA_network_nocofact <- compress_transporters(sub_network_nocofact = TCA_network_nocofact)
 
 enzymes <- unique(TCA_network_nocofact$attributes$V1)
 enzymes <- enzymes[!grepl("_[clxmenr]$",enzymes)]
 
 TCA_forest <- forestMaker(enzymes, TCA_network_nocofact$reaction_network)
+
+## OPTIONAL, but advised. This is to remove isolated network submodules
+TCA_forest <- lapply(TCA_forest, function(x){
+  if(length(x[[1]]) > 3 | length(x[[2]]) > 3)
+  {
+    return(x)
+  } else
+  {
+    return(NA)
+  }
+})
 
 reaction_set_list <- prepare_metabolite_set(penalty_range = penalty_min:penalty_max,  
                                             forest = TCA_forest,
