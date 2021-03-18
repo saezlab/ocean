@@ -21,6 +21,7 @@ t_table <- t_table_metactivity_input_formater(metabolomic_t_table = t_table,
 penalty_min <- 6 #minimum 1 and integer
 penalty_max <- 6 #maximum 9 and integer
 
+## These are the available pathways to choose from
 View(unique(recon2_redhuman$pathway))
 
 ##Select pathways relevant to include in network
@@ -49,6 +50,19 @@ TCA_forest <- lapply(TCA_forest, function(x){
     return(NA)
   }
 })
+
+## OPTIONAL, but advised. This is to remove tail reactions
+TCA_forest <- lapply(TCA_forest, function(x){
+  if((length(x[[1]]) <  length(x[[2]]) / 5) | (length(x[[2]]) <  length(x[[1]]) / 5))
+  {
+    return(NA)
+  } else
+  {
+    return(x)
+  }
+})
+
+TCA_forest <- TCA_forest[!is.na(TCA_forest)]
 
 reaction_set_list <- prepare_metabolite_set(penalty_range = penalty_min:penalty_max,  
                                             forest = TCA_forest,
