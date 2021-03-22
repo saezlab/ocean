@@ -51,6 +51,8 @@ TCA_forest <- lapply(TCA_forest, function(x){
   }
 })
 
+TCA_forest <- TCA_forest[!is.na(TCA_forest)]
+
 ## OPTIONAL, but advised. This is to remove tail reactions
 TCA_forest <- lapply(TCA_forest, function(x){
   if((length(x[[1]]) <  length(x[[2]]) / 5) | (length(x[[2]]) <  length(x[[1]]) / 5))
