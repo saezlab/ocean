@@ -137,9 +137,12 @@ condense_metabolite_set <- function(reaction_set_list, condense_sign = T, conden
 #' as returned by the condense_metabolite_set function
 #' @param penalty numeric, the index of the reaction_set_list_merged corresponding to
 #' the desired penalty
+#' @param filter_imbalance a vector of two numbers, representing the lower and upper bounds to filter 
+#' imbalanced reaction trees. for example c(0.33,0.67) will filter out any reaction were the upstream branch is 
+#' longer than 2 time the length of the downstream branch, and vice versa
 #' @return a regulon dataframe with three columns correposning to the enzme, the target metabolite and the weight
 #' @export
-prepare_regulon_df <- function(reaction_set_list_merged, penalty)
+prepare_regulon_df <- function(reaction_set_list_merged, penalty, filter_imbalance = c(0,1))
 {
   n <- length(unique(reaction_set_list_merged[[penalty]][,1]))
 
@@ -147,6 +150,20 @@ prepare_regulon_df <- function(reaction_set_list_merged, penalty)
 
   regulons_df <- regulons_df[regulons_df[,1] %in% unique(regulons_df[,1])[1:n],]
   regulons_df <- unique(regulons_df)
+  
+  test <- sapply(unique(regulons_df$set), function(x, regulons_df){
+    sub_reg <- regulons_df[regulons_df$set == x,]
+    prop <- sum(sub_reg$weight < 0) / length(sub_reg$weight)
+    if(prop >= filter_imbalance[1] & prop <= filter_imbalance[2])
+    {
+      return(x)
+    } else
+    {
+      return(NA)
+    }
+  }, regulons_df = regulons_df)
+  
+  regulons_df <- regulons_df[regulons_df$set %in% test,]
 
   return(regulons_df)
 }

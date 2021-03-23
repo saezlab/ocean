@@ -513,5 +513,13 @@ compress_transporters <- function(sub_network_nocofact)
   
   sub_network_nocofact$attributes <- sub_network_nocofact$attributes[sub_network_nocofact$attributes[,1] %in% network[,1] | sub_network_nocofact$attributes[,1] %in% network[,2],]
   
+  new_transporters <- unique(c(network[,1],network[,2]))
+  new_transporters <- new_transporters[grepl("transporter",new_transporters)]
+  
+  new_transporters <- as.data.frame(cbind(new_transporters,rep("transporter",length(new_transporters))))
+  names(new_transporters) <- c("V1","V2")
+  
+  sub_network_nocofact$attributes <- as.data.frame(rbind(sub_network_nocofact$attributes, new_transporters))
+  
   return(sub_network_nocofact)
 }

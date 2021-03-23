@@ -4,7 +4,11 @@
 \alias{prepare_regulon_df}
 \title{prepare_regulon_df}
 \usage{
-prepare_regulon_df(reaction_set_list_merged, penalty)
+prepare_regulon_df(
+  reaction_set_list_merged,
+  penalty,
+  filter_imbalance = c(0, 1)
+)
 }
 \arguments{
 \item{reaction_set_list_merged}{a metabolic-enzyme set collections, 
@@ -12,6 +16,10 @@ as returned by the condense_metabolite_set function}
 
 \item{penalty}{numeric, the index of the reaction_set_list_merged corresponding to
 the desired penalty}
+
+\item{filter_imbalance}{a vector of two numbers, representing the lower and upper bounds to filter 
+imbalanced reaction trees. for example c(0.33,0.67) will filter out any reaction were the upstream branch is 
+longer than 2 time the length of the downstream branch, and vice versa}
 }
 \value{
 a regulon dataframe with three columns correposning to the enzme, the target metabolite and the weight
