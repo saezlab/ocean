@@ -38,33 +38,10 @@ TCA_network_nocofact <- compress_transporters(sub_network_nocofact = TCA_network
 enzymes <- unique(TCA_network_nocofact$attributes$V1)
 enzymes <- enzymes[!grepl("_[clxmenr]$",enzymes)]
 
-TCA_forest <- forestMaker(enzymes, TCA_network_nocofact$reaction_network)
-
-## OPTIONAL, but advised. This is to remove isolated network submodules
-TCA_forest <- lapply(TCA_forest, function(x){
-  if(length(x[[1]]) > 3 | length(x[[2]]) > 3)
-  {
-    return(x)
-  } else
-  {
-    return(NA)
-  }
-})
-
-TCA_forest <- TCA_forest[!is.na(TCA_forest)]
-
-# ## OPTIONAL, but advised. This is to remove tail reactions
-# TCA_forest <- lapply(TCA_forest, function(x){
-#   if((length(x[[1]]) <  length(x[[2]]) / 5) | (length(x[[2]]) <  length(x[[1]]) / 5))
-#   {
-#     return(NA)
-#   } else
-#   {
-#     return(x)
-#   }
-# })
-# 
-# TCA_forest <- TCA_forest[!is.na(TCA_forest)]
+#branch_length applies a cutoff on the minimum length of the reaction network 
+#upstream and down stream of a given enzyme. Here we use a minimum length of 3 for
+#both directions
+TCA_forest <- forestMaker(enzymes, TCA_network_nocofact$reaction_network, branch_length = c(3,3))
 
 reaction_set_list <- prepare_metabolite_set(penalty_range = penalty_min:penalty_max,  
                                             forest = TCA_forest,
@@ -74,7 +51,7 @@ reaction_set_list_merged <- condense_metabolite_set(reaction_set_list = reaction
 
 penalty <- 6 #has be between penalty_min and penalty_max and integer
 
-regulons_df <- prepare_regulon_df(reaction_set_list_merged, penalty, c(0.25,0.75))
+regulons_df <- prepare_regulon_df(reaction_set_list_merged, penalty, c(0.1,0.9))
 
 ##Compute metabolic enzme enrichment score
 metactivity_res <- metactivity(metabolomic_t_table = t_table, 
@@ -105,5 +82,5 @@ hm <- pathway_HM(mean_NES_df = mean_NES_df, pathway_name = 'KEGG_CITRATE_CYCLE_T
 plot(hm)
 
 ## visualise the network
-plot_reaction_network(TCA_network_nocofact, t_table, mean_NES_df, column_index = 1)
+plot_reaction_network(TCA_network_nocofact, t_table, mean_NES_df, column_index = 1, vis.height = 2000)
 

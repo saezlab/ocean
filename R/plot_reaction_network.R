@@ -40,7 +40,8 @@ make_discrete_palette <- function(numeric_vector, rbrewer_plalette_name)
 #' @return lorem ipsum...
 #' @export
 #' @importFrom visNetwork visNetwork
-plot_reaction_network <- function(network_and_attributes, t_table, scores_df, column_index, rbrewer_plalette_name = "RdYlGn")
+#' @importFrom visNetwork visOptions
+plot_reaction_network <- function(network_and_attributes, t_table, scores_df, column_index, rbrewer_plalette_name = "RdYlGn", vis.height = 700, vis.degree = 2)
 {
   
   edges <- network_and_attributes[[1]]
@@ -81,5 +82,7 @@ plot_reaction_network <- function(network_and_attributes, t_table, scores_df, co
   
   edges$arrows <- "to"
   
-  visNetwork::visNetwork(nodes = nodes, edges = edges)
+  visNetwork::visNetwork(nodes = nodes, edges = edges, width = "100%", height = vis.height) %>% 
+    visOptions(nodesIdSelection = TRUE,
+               highlightNearest = list(enabled = T, degree = vis.degree, hover = T))
 }

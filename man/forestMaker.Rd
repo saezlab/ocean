@@ -4,7 +4,7 @@
 \alias{forestMaker}
 \title{forestMaker}
 \usage{
-forestMaker(molecule_names, reaction_network)
+forestMaker(molecule_names, reaction_network, branch_length = c(1, 1))
 }
 \arguments{
 \item{molecule_names}{ipsum...}

@@ -85,7 +85,7 @@ buildTree <- function(root, graph)
 #' @importFrom parallel detectCores
 #' @importFrom parallel mclapply
 #' @export
-forestMaker <- function(molecule_names, reaction_network)
+forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1))
 {
   graph <- graph_from_data_frame(d = reaction_network[, c(1, 2)], directed = TRUE)
   
@@ -125,6 +125,18 @@ forestMaker <- function(molecule_names, reaction_network)
   }
   
   names(forest) <- molecule_names
+  
+  forest <- lapply(forest, function(x){
+    if(length(x[[1]]) > branch_length[1] | length(x[[2]]) > branch_length[2])
+    {
+      return(x)
+    } else
+    {
+      return(NA)
+    }
+  })
+  
+  forest <- forest[!is.na(forest)]
   
   return(forest)
 }
