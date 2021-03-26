@@ -41,7 +41,7 @@ make_discrete_palette <- function(numeric_vector, rbrewer_plalette_name)
 #' @export
 #' @importFrom visNetwork visNetwork
 #' @importFrom visNetwork visOptions
-plot_reaction_network <- function(network_and_attributes, t_table, scores_df, column_index, rbrewer_plalette_name = "RdYlGn", vis.height = 700, vis.degree = 2)
+plot_reaction_network <- function(network_and_attributes, t_table, scores_df, column_index, rbrewer_plalette_name = "RdBu", vis.height = 700, vis.degree = 2)
 {
   
   edges <- network_and_attributes[[1]]
@@ -70,7 +70,13 @@ plot_reaction_network <- function(network_and_attributes, t_table, scores_df, co
   
   nodes$stat <- nodes$metab_stat + nodes$enzyme_score
   
-  nodes$color <- make_discrete_palette(nodes$stat, rbrewer_plalette_name)
+  if(rbrewer_plalette_name == "RdBu")
+  {
+    nodes$color <- make_discrete_palette(nodes$stat * -1, rbrewer_plalette_name)
+  } else
+  {
+    nodes$color <- make_discrete_palette(nodes$stat, rbrewer_plalette_name)
+  }
   
   nodes$color <- ifelse(nodes$stat == 0, "#C1C1C1", nodes$color)
   

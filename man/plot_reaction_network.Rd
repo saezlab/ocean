@@ -9,7 +9,7 @@ plot_reaction_network(
   t_table,
   scores_df,
   column_index,
-  rbrewer_plalette_name = "RdYlGn",
+  rbrewer_plalette_name = "RdBu",
   vis.height = 700,
   vis.degree = 2
 )
