@@ -77,10 +77,40 @@ plot_reaction_network <- function(network_and_attributes, t_table, scores_df, co
   nodes$label <- nodes$id
   
   nodes$shape <- ifelse(nodes$molecule_type == "reaction_enzyme", "square", "triangle")
+  nodes$shape <- ifelse(grepl("transporter",nodes$id), "circle", nodes$shape)
+  
+  nodes$label <- gsub("^transporter.*","",nodes$label)
   
   names(edges) <- c("from","to")
   
   edges$arrows <- "to"
+  
+  mapping_vec <- mapping_table$metab
+  names(mapping_vec) <- mapping_table$KEGG
+  
+  nodes$label <- sapply(nodes$label, function(x,mapping_vec){
+    
+    if(grepl("cpd:",x))
+    {
+      suffixe <- stringr::str_extract(x, "_.$")
+      x <- gsub("_.$","",x)
+      x <- gsub("cpd:","",x)
+      if(x %in% names(mapping_vec))
+      {
+        x <- mapping_vec[x]
+      }
+      
+      if(!is.na(suffixe))
+      {
+        x <- paste0(x, suffixe)
+      }
+      
+      return(x)
+    } else
+    {
+      return(x)
+    }
+  }, mapping_vec = mapping_vec, simplify = F, USE.NAMES = F)
   
   visNetwork::visNetwork(nodes = nodes, edges = edges, width = "100%", height = vis.height) %>% 
     visOptions(nodesIdSelection = TRUE,

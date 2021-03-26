@@ -344,6 +344,20 @@ model_to_pathway_sif <- function(pathway_to_keep,
   {
     reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Purine synthesis"]]))
   }
+  if("Valine, leucine, and isoleucine metabolism" %in% pathway_to_keep)
+  {
+    reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Carnitine synthesis"]])) #add ketoacid to carnitine
+    
+    reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Valine leucine and isoleucine metabolism"]])) #add bcat1 reverse
+    
+    reactions_df <- reactions_df[reactions_df[,1] != "1629_594_593_1738" & #remove the wrong BCKDH complex and correct it
+                                   reactions_df[,2] != "1629_594_593_1738" &
+                                   reactions_df[,1] != "1629_1738_594_593" &
+                                   reactions_df[,2] != "1629_1738_594_593",] 
+    
+    reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["BCKDH"]])) #add correct BCKDH
+    
+  }
   ###
   return(reactions_df)
 }
