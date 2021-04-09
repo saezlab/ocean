@@ -89,7 +89,15 @@ forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1)
 {
   graph <- graph_from_data_frame(d = reaction_network[, c(1, 2)], directed = TRUE)
   
-  ncores <- min(c(1000,detectCores()-1))
+  if(.Platform$OS.type == "windows")
+  {
+    print("Sadly, windows does not support mcl parallelisation. Setting conversion on a single CPU.")
+    ncores <- 1
+  } else
+  {
+    ncores <- min(c(1000,detectCores()-1))
+  }
+
   
   print(ncores)
   
