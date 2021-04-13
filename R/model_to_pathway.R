@@ -355,6 +355,9 @@ model_to_pathway_sif <- function(pathway_to_keep,
                                    reactions_df[,1] != "1629_1738_594_593" &
                                    reactions_df[,2] != "1629_1738_594_593",]
     
+    reactions_df <- reactions_df[!grepl("CRAT.*_reverse",reactions_df[,1]) & #remove reverse crat
+                                   !grepl("CRAT.*_reverse",reactions_df[,2]),]
+    
     reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["BCKDH"]])) #add correct BCKDH
   }
   ###
@@ -453,6 +456,8 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
 #' @export
 compress_transporters <- function(sub_network_nocofact)
 {
+  #This test is to identify reaction where the reactant and product are the same metabolite 
+  #in different compartment (e.g. a transporter)
   test_1 <- paste(gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$source), 
                   gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$target),
                   sep = "_")
@@ -536,3 +541,82 @@ compress_transporters <- function(sub_network_nocofact)
   
   return(sub_network_nocofact)
 }
+
+#'\code{split_transaminases}
+#'
+#' This function removes cofactors from reaction networks generate by the model_to_pathway_sif function
+#'
+#' @param sub_network_nocofact  ipsum...
+#' @return ipsum...
+#' @export
+split_transaminases <- function(sub_network_nocofact)
+{
+  sub_net <- sub_network_nocofact$reaction_network
+  
+  transaminases_net <- sub_net[grepl("C0002[56]",sub_net$source) |
+                                 grepl("C0002[56]",sub_net$target),]
+  
+  
+  sub_net_no_transaminase <- sub_net[!(grepl("C0002[56]",sub_net$source) |
+                                         grepl("C0002[56]",sub_net$target)),]
+  
+  transaminases_potential <- unique(c(transaminases_net$source,transaminases_net$target))
+  transaminases_potential <- transaminases_potential[!grepl("cpd:",transaminases_potential)]
+  
+  transaminases_net <- sub_net[sub_net$source %in% transaminases_potential |
+                                 sub_net$target %in% transaminases_potential,]
+  
+  splitted_transaminase <- sapply(transaminases_potential, function(transaminase, transaminases_net){
+    sub_net_transaminase <- transaminases_net[transaminase == transaminases_net$source |
+                                                transaminase == transaminases_net$target,]
+    
+    columns <- c(1,2)
+    
+    elements <- unique(c(sub_net_transaminase[,1],sub_net_transaminase[,2]))
+    
+    if(sum(grepl("cpd:C00025_.",elements)) & sum(grepl("cpd:C00026_.",elements)))
+    {
+      for(i in 1:length(sub_net_transaminase[,1]))
+      {
+        for(j in 1:2)
+        {
+          if(grepl("C0002[56]",sub_net_transaminase[i,j]))
+          {
+            sub_net_transaminase[i,columns[-j]] <- paste(sub_net_transaminase[i,columns[-j]],"_gluakg",sep = "")
+          }
+        }
+      }
+    }
+    
+    if(sum(grepl("cpd:C00025_.",elements)) & sum(grepl("cpd:C00064_.",elements)))
+    {
+      for(i in 1:length(sub_net_transaminase[,1]))
+      {
+        for(j in 1:2)
+        {
+          if(grepl("C00025",sub_net_transaminase[i,j]) | grepl("C00064",sub_net_transaminase[i,j]))
+          {
+            sub_net_transaminase[i,columns[-j]] <- paste(sub_net_transaminase[i,columns[-j]],"_glugln",sep = "")
+          }
+        }
+      }
+    }
+    
+    return(sub_net_transaminase)
+  }, transaminases_net = transaminases_net, USE.NAMES = T, simplify = F)
+  
+  splitted_transaminase <- as.data.frame(do.call(rbind,splitted_transaminase))
+  
+  sub_network_nocofact$reaction_network <- as.data.frame(rbind(sub_net_no_transaminase, splitted_transaminase))
+  
+  sub_network_nocofact$reaction_network <- unique(sub_network_nocofact$reaction_network)
+  
+  network_attributes <- as.data.frame(cbind(unique(c(sub_network_nocofact$reaction_network[,1],sub_network_nocofact$reaction_network[,2])),NA))
+  network_attributes[,2] <- ifelse(grepl("cpd:",network_attributes[,1]), "metabolite","reaction_enzyme")
+  names(network_attributes) <- names(sub_network_nocofact$attributes)
+  
+  sub_network_nocofact$attributes <- network_attributes
+  
+  return(sub_network_nocofact)
+}
+
