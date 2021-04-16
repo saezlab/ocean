@@ -35,6 +35,9 @@ TCA_network_nocofact <- remove_cofactors(TCA_network)
 ##This is to simplify the network sutrcture by compressing redundant transporters
 TCA_network_nocofact <- compress_transporters(sub_network_nocofact = TCA_network_nocofact)
 
+##This is to avoid cross ping pong between reactants and products of reversible transaminases 
+sub_network_nocofact <- split_transaminases(sub_network_nocofact = sub_network_nocofact)
+
 enzymes <- unique(TCA_network_nocofact$attributes$V1)
 enzymes <- enzymes[!grepl("_[clxmenr]$",enzymes)]
 
@@ -51,7 +54,7 @@ reaction_set_list_merged <- condense_metabolite_set(reaction_set_list = reaction
 
 penalty <- 6 #has be between penalty_min and penalty_max and integer
 
-regulons_df <- prepare_regulon_df(reaction_set_list_merged, penalty, c(0.1,0.9))
+regulons_df <- prepare_regulon_df(reaction_set_list_merged, penalty, c(0,1))
 
 ##Compute metabolic enzme enrichment score
 metactivity_res <- metactivity(metabolomic_t_table = t_table, 

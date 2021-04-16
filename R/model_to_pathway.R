@@ -298,6 +298,23 @@ model_to_pathway_sif <- function(pathway_to_keep,
             reactions_df[j,i] <- mapping_vec[reactions_df[j,i]]
           }
         }
+      } else
+      {
+        if(has_affixe)
+        {
+          reactions_df[j,i] <- paste(reactions_df[j,i],affixe,sep = ">")
+        }
+        else
+        {
+          if(has_affixe_lower)
+          {
+            reactions_df[j,i] <- paste(reactions_df[j,i],affixe_lower,sep = "<")
+          }
+          else
+          {
+            reactions_df[j,i] <- reactions_df[j,i]
+          }
+        }
       }
       if(gsub("_reverse","",reactions_df[j,i]) %in% names(mapping_vec))
       {
