@@ -471,91 +471,80 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
 #' @param sub_network_nocofact  ipsum...
 #' @return ipsum...
 #' @export
-compress_transporters <- function(sub_network_nocofact)
+compress_transporters <- function (sub_network_nocofact) 
 {
-  #This test is to identify reaction where the reactant and product are the same metabolite 
-  #in different compartment (e.g. a transporter)
-  test_1 <- paste(gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$source), 
-                  gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$target),
+  test_1 <- paste(gsub("_[cxrnme]$", "", sub_network_nocofact$reaction_network$source), 
+                  gsub("_[cxrnme]$", "", sub_network_nocofact$reaction_network$target), 
                   sep = "_")
-  
-  test_2 <- paste(gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$target), 
-                  gsub("_[cxrnme]$","",sub_network_nocofact$reaction_network$source),
+  test_2 <- paste(gsub("_[cxrnme]$", "", sub_network_nocofact$reaction_network$target), 
+                  gsub("_[cxrnme]$", "", sub_network_nocofact$reaction_network$source), 
                   sep = "_")
-  
   test_1[test_1 %in% test_2]
-  
-  transporters <- unique(c(sub_network_nocofact$reaction_network[test_1 %in% test_2,1], sub_network_nocofact$reaction_network[test_1 %in% test_2,2]))
-  transporters <- transporters[!grepl("_[cxrnme]$",transporters)]
-  
-  for(i in 1:2)
-  {
-    sub_network_nocofact$reaction_network[,i] <- sapply(sub_network_nocofact$reaction_network[,i], function(x, transporters){
-      if(x %in% transporters)
-      {
-        return("transporter")
-      } else
-      {
-        return(x)
-      }
-    }, transporters = transporters)
+  transporters <- unique(c(sub_network_nocofact$reaction_network[test_1 %in% 
+                                                                   test_2, 1], sub_network_nocofact$reaction_network[test_1 %in% 
+                                                                                                                       test_2, 2]))
+  transporters <- transporters[!grepl("_[cxrnme]$", transporters)]
+  for (i in 1:2) {
+    sub_network_nocofact$reaction_network[, i] <- sapply(sub_network_nocofact$reaction_network[, 
+                                                                                               i], function(x, transporters) {
+                                                                                                 if (x %in% transporters) {
+                                                                                                   return("transporter")
+                                                                                                 }
+                                                                                                 else {
+                                                                                                   return(x)
+                                                                                                 }
+                                                                                               }, transporters = transporters)
   }
-  
-  sub_network_nocofact$reaction_network$edgeId <- paste(sub_network_nocofact$reaction_network$source, sub_network_nocofact$reaction_network$target, sep = "_")
-  sub_network_nocofact$reaction_network <- sub_network_nocofact$reaction_network[!duplicated(sub_network_nocofact$reaction_network$edgeId),]
-  
+  sub_network_nocofact$reaction_network$edgeId <- paste(sub_network_nocofact$reaction_network$source, 
+                                                        sub_network_nocofact$reaction_network$target, sep = "_")
+  sub_network_nocofact$reaction_network <- sub_network_nocofact$reaction_network[!duplicated(sub_network_nocofact$reaction_network$edgeId), 
+  ]
   edge_transporter <- sub_network_nocofact$reaction_network$edgeId
-  edge_transporter <- edge_transporter[grepl("transporter",edge_transporter)]
-  
-  groups <- rep(0,length(edge_transporter))
-  for(i in 1:length(edge_transporter))
-  {
-    if(grepl("^cpd:",edge_transporter[i]) | grepl("_[cxrnme]_",edge_transporter[i]))
-    {
-      metab <- gsub("_.*","",edge_transporter[i])
-      for(j in 1:length(edge_transporter))
+  edge_transporter <- edge_transporter[grepl("transporter", 
+                                             edge_transporter)]
+  groups <- rep(0, length(edge_transporter))
+  metab_memory <- c()
+  for (i in 1:length(edge_transporter)) {
+    if (grepl("^cpd:", edge_transporter[i]) | grepl("_[cxrnme]_", 
+                                                    edge_transporter[i])) {
+      metab <- gsub("_.*", "", edge_transporter[i])
+      if(!metab %in% metab_memory)
       {
-        if(grepl("^transporter",edge_transporter[j]))
-        {
-          if(grepl(metab, edge_transporter[j]) & gsub("_transporter","",edge_transporter[i]) != gsub("transporter_","",edge_transporter[j]))
+        metab_memory[i] <- metab
+        for (j in 1:length(edge_transporter)) {
+          if (grepl(metab, edge_transporter[j]))
           {
-            groups[i] <- i
             groups[j] <- i
           }
         }
       }
     }
   }
-  
   names(groups) <- edge_transporter
-  
   network <- sub_network_nocofact$reaction_network
-  for(i in 1:2)
-  {
-    for(j in 1:length(network[,i]))
-    {
-      if(network[j,i] == "transporter")
-      {
-        print(network[j,3])
-        network[j,i] <- paste(network[j,i], groups[network[j,3]], sep = ">")
+  for (i in 1:2) {
+    for (j in 1:length(network[, i])) {
+      if (network[j, i] == "transporter") {
+        print(network[j, 3])
+        network[j, i] <- paste(network[j, i], groups[network[j, 
+                                                             3]], sep = ">")
       }
-    }  
+    }
   }
-  
-  network <- network[!grepl("^SLC",network$edgeId) & !grepl("_SLC",network$edgeId),]
-  
-  sub_network_nocofact$reaction_network <- network[,-3]
-  
-  sub_network_nocofact$attributes <- sub_network_nocofact$attributes[sub_network_nocofact$attributes[,1] %in% network[,1] | sub_network_nocofact$attributes[,1] %in% network[,2],]
-  
-  new_transporters <- unique(c(network[,1],network[,2]))
-  new_transporters <- new_transporters[grepl("transporter",new_transporters)]
-  
-  new_transporters <- as.data.frame(cbind(new_transporters,rep("transporter",length(new_transporters))))
-  names(new_transporters) <- c("V1","V2")
-  
-  sub_network_nocofact$attributes <- as.data.frame(rbind(sub_network_nocofact$attributes, new_transporters))
-  
+  network <- network[!grepl("^SLC", network$edgeId) & !grepl("_SLC", 
+                                                             network$edgeId), ]
+  sub_network_nocofact$reaction_network <- network[, -3]
+  sub_network_nocofact$attributes <- sub_network_nocofact$attributes[sub_network_nocofact$attributes[, 
+                                                                                                     1] %in% network[, 1] | sub_network_nocofact$attributes[, 
+                                                                                                                                                            1] %in% network[, 2], ]
+  new_transporters <- unique(c(network[, 1], network[, 2]))
+  new_transporters <- new_transporters[grepl("transporter", 
+                                             new_transporters)]
+  new_transporters <- as.data.frame(cbind(new_transporters, 
+                                          rep("transporter", length(new_transporters))))
+  names(new_transporters) <- c("V1", "V2")
+  sub_network_nocofact$attributes <- as.data.frame(rbind(sub_network_nocofact$attributes, 
+                                                         new_transporters))
   return(sub_network_nocofact)
 }
 

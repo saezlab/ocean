@@ -11,6 +11,7 @@ Authors@R: c(
 Maintainer: Aurelien Dugourd <dugourdaurelien@gmail.com>
 Description: metabolic enzyme enrichment analysis
     Based on the model of TF and kinase activity estimation
+Depends: R (>= 3.6)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
