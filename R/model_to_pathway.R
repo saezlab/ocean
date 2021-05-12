@@ -560,11 +560,15 @@ split_transaminases <- function(sub_network_nocofact)
   sub_net <- sub_network_nocofact$reaction_network
   
   transaminases_net <- sub_net[grepl("C0002[56]",sub_net$source) |
-                                 grepl("C0002[56]",sub_net$target),]
+                                 grepl("C0002[56]",sub_net$target) |
+                                 grepl("C00064",sub_net$source) |
+                                 grepl("C00064",sub_net$target),]
   
   
   sub_net_no_transaminase <- sub_net[!(grepl("C0002[56]",sub_net$source) |
-                                         grepl("C0002[56]",sub_net$target)),]
+                                         grepl("C0002[56]",sub_net$target) |
+                                         grepl("C00064",sub_net$source) |
+                                         grepl("C00064",sub_net$target)),]
   
   transaminases_potential <- unique(c(transaminases_net$source,transaminases_net$target))
   transaminases_potential <- transaminases_potential[!grepl("cpd:",transaminases_potential)]
