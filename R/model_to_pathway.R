@@ -412,10 +412,11 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
   {
     
     brite <- compound$BRITE
+    compound$NAME <- gsub(";","",compound$NAME)
     if(!is.null(compound$ATOM))
     {
       brite <- gsub("[ ]+","",brite)
-      if("Cofactors" %in% brite | "Nucleotides" %in% brite | "CO2;" %in% compound$NAME | as.numeric(compound$ATOM[1]) <= 3 | "ITP;" %in% compound$NAME | "IDP;" %in% compound$NAME | "NADH;" %in% compound$NAME | "NADPH;" %in% compound$NAME)
+      if("Cofactors" %in% brite | "Nucleotides" %in% brite | "CO2" %in% compound$NAME | as.numeric(compound$ATOM[1]) <= 3 | "ITP" %in% compound$NAME | "IDP" %in% compound$NAME | "NADH" %in% compound$NAME | "NADPH" %in% compound$NAME | "FADH2" %in% compound$NAME)
       {
         bad_kegg_compounds[[compound$ENTRY[1]]] <- compound
       }
