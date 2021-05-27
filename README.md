@@ -7,6 +7,8 @@ R package for metabolic enzyme enrichment anaylsis
 
 The functional insights that metabolomic data sets contain currently lies under-exploited. This is in part due to the complexity of metabolic reaction networks and the indirect relationship between reaction fluxes and metabolite abundance. Yet, footprint-based methods have been available for decades in the context of other omic data sets such as transcriptomic and phosphoproteomic. Here, we present ocEAn, a method that defines metabolic enzyme footprint from a curated reduced version of the recon2 reaction network and use them to explore coordinated deregulations of metabolite abundances with respect to their position relative to metabolic enzymes in the same manner as Kinase-substrate and TF-targets Enrichment analysis. This picture diplays the TCA cycle with deregulated metabolites and estimated metabolic enzyme deregulations in kidney cancer. You can generate a dynamic visualisation of this network and other pathways by following our tutorial: https://github.com/saezlab/ocean/blob/master/tutorial_submodules.R
 
+![alt text](https://github.com/saezlab/ocean/blob/master/Summary.png?raw=true)
+
 ![alt text](https://github.com/saezlab/ocean/blob/master/TCA_shot.png?raw=true)
 
 ## Tutorial
