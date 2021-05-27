@@ -72,7 +72,7 @@ plot_reaction_network <- function(network_and_attributes, t_table, scores_df, co
   
   if(rbrewer_plalette_name == "RdBu")
   {
-    nodes_enzymes <- nodes[nodes$molecule_type == "reaction_enzyme",]
+    nodes_enzymes <- nodes[nodes$molecule_type %in% c("reaction_enzyme","transporter"),]
     nodes_metabolites <- nodes[nodes$molecule_type == "metabolite",]
     nodes_enzymes$color <- make_discrete_palette(nodes_enzymes$stat * -1, rbrewer_plalette_name)
     nodes_metabolites$color <- make_discrete_palette(nodes_metabolites$stat * -1, rbrewer_plalette_name)
@@ -80,7 +80,7 @@ plot_reaction_network <- function(network_and_attributes, t_table, scores_df, co
     # nodes$color <- make_discrete_palette(nodes$stat * -1, rbrewer_plalette_name)
   } else
   {
-    nodes_enzymes <- nodes[nodes$molecule_type == "reaction_enzyme",]
+    nodes_enzymes <- nodes[nodes$molecule_type %in% c("reaction_enzyme","transporter"),]
     nodes_metabolites <- nodes[nodes$molecule_type == "metabolite",]
     nodes_enzymes$color <- make_discrete_palette(nodes_enzymes$stat, rbrewer_plalette_name)
     nodes_metabolites$color <- make_discrete_palette(nodes_metabolites$stat, rbrewer_plalette_name)
