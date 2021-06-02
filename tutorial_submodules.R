@@ -36,7 +36,7 @@ TCA_network_nocofact <- remove_cofactors(TCA_network)
 TCA_network_nocofact <- compress_transporters(sub_network_nocofact = TCA_network_nocofact)
 
 ##This is to avoid cross ping pong between reactants and products of reversible transaminases 
-sub_network_nocofact <- split_transaminases(sub_network_nocofact = sub_network_nocofact)
+TCA_network_nocofact <- split_transaminases(sub_network_nocofact = TCA_network_nocofact)
 
 enzymes <- unique(TCA_network_nocofact$attributes$V1)
 enzymes <- enzymes[!grepl("_[clxmenr]$",enzymes)]
@@ -70,12 +70,12 @@ mean_NES_df <- metactivity_res$NES
 translated_results <- translate_results(regulons_df = regulons_df, t_table = t_table, mapping_table = mapping_table)
 
 ##Visualise results for single enzmes
-plots <- plotMetaboliteContribution(enzyme = 'ME2', 
+plots <- plotMetaboliteContribution(enzyme = '4967_1738_8050_1743', 
                                     stat_df = translated_results$t_table, 
                                     metabolite_sets = translated_results$regulons_df, 
                                     contrast_index = 1, 
                                     stat_name = 't', 
-                                    scaling_factor = 15)
+                                    scaling_factor = 5, nLabels = 15)
 
 plot(plots$scatter)
 plot(plots$cumsumPlot)

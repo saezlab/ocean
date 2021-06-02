@@ -4,7 +4,7 @@
 \alias{buildTree}
 \title{buildtree}
 \usage{
-buildTree(root, graph)
+buildTree(root, graph, remove_reverse = F)
 }
 \arguments{
 \item{root}{ipsum...}

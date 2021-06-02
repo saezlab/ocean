@@ -4,10 +4,24 @@
 #' @param graph ipsum...
 #' @return ipsum...
 #' @importFrom igraph neighbors
-buildTree <- function(root, graph)
+buildTree <- function(root, graph, remove_reverse = F)
 {
   #print(root)
-  
+  if(remove_reverse)
+  {
+    if(grepl("_reverse",root))
+    {
+      root_reverse <- gsub("_reverse","",root)
+    } else
+    {
+      root_reverse <- paste(root,"_reverse",sep = "")
+    }
+    
+    if(root_reverse %in% names(V(graph)))
+    {
+      graph <- delete_vertices(graph,root_reverse)
+    }
+  }
   ##initialise variables
   up_down <- list(0)
   k <- 1
@@ -85,7 +99,7 @@ buildTree <- function(root, graph)
 #' @importFrom parallel detectCores
 #' @importFrom parallel mclapply
 #' @export
-forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1))
+forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1), remove_reverse = F)
 {
   graph <- graph_from_data_frame(d = reaction_network[, c(1, 2)], directed = TRUE)
   
@@ -117,19 +131,19 @@ forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1)
       print(i)
       molecule_names_run_i <- molecule_names[breaks[i]:(breaks[i+1]-1)]
       print(molecule_names_run_i)
-      splitted_forest[[i]] <- mclapply(molecule_names_run_i, buildTree, graph, mc.cores = ncores)
+      splitted_forest[[i]] <- mclapply(molecule_names_run_i, buildTree, graph, remove_reverse, mc.cores = ncores)
     }
     
     molecule_names_run_i <- molecule_names[breaks[nruns]:length(molecule_names)]
     print(molecule_names_run_i)
-    splitted_forest[[nruns]] <- mclapply(molecule_names_run_i, buildTree, graph, mc.cores = ncores)
+    splitted_forest[[nruns]] <- mclapply(molecule_names_run_i, buildTree, graph, remove_reverse, mc.cores = ncores)
     
     forest <- do.call(c, splitted_forest)
   }
   else
   {
     print(molecule_names)
-    forest <- mclapply(molecule_names, buildTree, graph, mc.cores = ncores)
+    forest <- mclapply(molecule_names, buildTree, graph, remove_reverse, mc.cores = ncores)
   }
   
   names(forest) <- molecule_names
