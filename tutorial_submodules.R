@@ -127,3 +127,5 @@ plot(hm)
 plot_reaction_network(TCA_network_nocofact, t_table, mean_NES_df,
                       column_index = 1, vis.height = 2000)
 
+## 5. Create new dataframe for getting pathway infos for metabolites
+metab_pathways_df <- map_pathways_to_metabolites(translated_results$regulons_df)
