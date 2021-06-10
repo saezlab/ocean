@@ -13,6 +13,9 @@ t_table <- ttop_list_to_t_table(
                          number = length(toy_metabolomic_data[,1]),
                          adjust.method = "fdr"))
 
+##This step is particularly important because this is where the users metabolic identifiers are mapped to the kegg ids used by the method.
+#Thus, the user should provide a mapping table in the same format as the mapping_table presented here (you can look at it to inspire yourself from it)
+#The mapping table should map the users own metabolic identifiers to kegg compound IDs
 t_table <- t_table_metactivity_input_formater(metabolomic_t_table = t_table,
                                               mapping_table = mapping_table,
                                               affixes = c("c","l","x","m","e","n","r"))

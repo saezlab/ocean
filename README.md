@@ -26,6 +26,9 @@ install_github("saezlab/ocean")
 
 You can then run the tutorial scripts with a kidney cancer toy metabolomic dataset: https://github.com/saezlab/ocean/blob/master/tutorial_submodules.R
 
+PLEASE READ THE TUTORIAL CAREFULLY :) and do not hesitate to have an extensive look at all the variable in it 
+and what information they contain.
+
 ## Citations
 
 The manuscript associated with ocEAn will be available soon. Stay tuned !
