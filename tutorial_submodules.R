@@ -8,7 +8,7 @@
 #'       with respect to their position relative to metabolic enzymes.
 #'       This is similar to Kinase-substrate and TF-targets enrichment analyses.
 
-## install COSMOS
+## install ocEAn
 #library(devtools)
 #install_github("saezlab/ocean")
 

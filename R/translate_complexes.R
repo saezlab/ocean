@@ -22,14 +22,14 @@ library(magrittr)
 library(sjmisc)   
 
 
-#'\code{translate_complexes}
+#' \code{translate_complexes}
 #'
-#'Function to separate the complexes into a vector of enzyme strings, map the
-#'identifiers to their enzyme name using recon2_redhuman, and give back the full 
-#'source/target network with enzymes, metabolites and translated complexes.
+#' Function to separate the complexes into a vector of enzyme strings, map the
+#' identifiers to their enzyme name using recon2_redhuman, and give back the full 
+#' source/target network with enzymes, metabolites and translated complexes.
 #'
-#'@param Network source/target network containing enzymes, complexes, metabolites
-#'@return source/target network containing enzymes, translated complexes, metabolites
+#' @param Network source/target network containing enzymes, complexes, metabolites
+#' @return source/target network containing enzymes, translated complexes, metabolites
 
 translate_complexes <- function(Network){
   
