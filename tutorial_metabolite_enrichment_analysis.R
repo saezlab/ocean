@@ -107,17 +107,21 @@ p_value <- 2.0 #define cutoff p-value
 metabolites_significant_df <- translated_results$t_table[translated_results$t_table$tumorVsHealthy <= -p_value | translated_results$t_table$tumorVsHealthy >= p_value, ] 
 metabolites_significant <- unique(metabolites_significant_df$metabolites)
 
+##Select pathways relevant to include in ORA
+View(unique(metabolites_pathway_df[,"pathway", drop=F]))
+pathways <- metabolites_pathway_df[metabolites_pathway_df$pathway %in% c("KEGG_CITRATE_CYCLE_TCA_CYCLE",
+                                                                         "KEGG_GLYCOLYSIS_GLUCONEOGENESIS",
+                                                                         "KEGG_PYRUVATE_METABOLISM"), ]
 
 ##We perform the ORA with Fisher's exact test (from piano package)
 sig_pathways <- runGSAhyper(genes = metabolites_significant, 
                             universe = metabolites_universe,
-                            gsc = loadGSC(metabolites_pathway_df),
+                            gsc = loadGSC(pathways),
                             adjMethod = "fdr")
 sig_pathways_df <- as.data.frame(sig_pathways$resTab)  %>% 
   tibble::rownames_to_column(var = "pathway")
 
 
-
-##Visualize results
-
-
+##Visualize most significant pathways in a bar plot
+barplot = barplot_pathways(sig_pathways_df)
+barplot

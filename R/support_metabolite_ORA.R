@@ -19,6 +19,7 @@
 library(ocean)
 library(dplyr)
 library(sjmisc)   
+library(ggplot2)
 
 
 #' \code{rearrange_dataframe}
@@ -36,11 +37,11 @@ rearrange_dataframe <- function(network){
   network[new_cols] <- NA
   metabolites_df <- network[c("enzymes", "metabolites", "source", "target")]
   
-  ##Copy entries from source ad target column to metabolite or enzyme column
+  ##Copy entries from source and target column to metabolite or enzyme column
   
-  for (i in 3:ncol(metabolites_df))  #iterate through source and target column
+  for (i in 3:ncol(metabolites_df)) #iterate through source and target column
   {
-    for (j in 1:nrow(metabolites_df))      #iterate through rows
+    for (j in 1:nrow(metabolites_df)) #iterate through rows
     {
       if (str_contains(metabolites_df[j,i],"cpd:")){
         metabolites_df$metabolites[j] <- metabolites_df[j,i]
@@ -77,7 +78,8 @@ map_pathways_to_metabolites <- function(metab_df){
   {
     if(str_contains(metab_df$enzymes[i],"_"))
     {
-      split_str <- as.vector(unlist(strsplit(as.character(metab_df$enzymes[i]), split = "_")))
+      split_str <- as.vector(unlist(strsplit(as.character(metab_df$enzymes[i]),
+                                             split = "_")))
       
       #create new row for every element in split_str (from the 2nd element on) 
       for (j in 2:length(split_str))
@@ -91,7 +93,8 @@ map_pathways_to_metabolites <- function(metab_df){
   
   ##Reorder rows by two conditions: 1. column "enzymes", 2. column "metabolites"
   metab_df <- metab_df[order(metab_df$enzymes, metab_df$metabolites), ]
-  metab_df <- distinct(metab_df)  #keep only unique rows (if a complex consisted of two or more similar enzymes)
+  ##Keep only unique rows (if a complex consisted of two or more similar enzymes)
+  metab_df <- distinct(metab_df)
   
 
   ##Add new column "pathways" by merging data frame with kegg pathways (by enzymes)
@@ -111,4 +114,47 @@ map_pathways_to_metabolites <- function(metab_df){
   metab_pathway_df <- distinct(metab_pathway_df)  #keep only unique rows
   
   return(metab_pathway_df)
+}
+
+
+
+#'\code{barplot_pathways}
+#'
+#'Function to plot the pathways which are significantly overexpressed
+#'
+#'@param sigPathwaysDf  Data frame containing all significant pathways as a result of the ORA
+#'@return Bar plot of the most significant pathways by -log10(p-value)
+
+barplot_pathways <- function(sigPathwaysDf){
+  
+  ##Filtering out top pathways (max. 20) by Adjusted p-value
+  sigPathwaysDf <- sigPathwaysDf[order(sigPathwaysDf$'Adjusted p-value'),]
+  top_hallmark <- sigPathwaysDf[1:20, c(7,1,2)]
+  top_hallmark <- na.omit(top_hallmark)   #remove rows containing NA
+  top_hallmark <- top_hallmark[order(top_hallmark$'p-value', decreasing = TRUE),]
+  
+  ##Write pathways with capital letter and without underscore
+  top_hallmark$pathway <- tolower(top_hallmark$pathway)
+  top_hallmark$pathway <- gsub("(^|\\p{P})(.)",
+                               "\\1\\U\\2",    
+                               top_hallmark$pathway, perl = TRUE)
+  top_hallmark$pathway <- gsub("_"," ",top_hallmark$pathway)
+  
+  top_hallmark$`p-value` <- -log10(top_hallmark$`p-value`)
+  top_hallmark$pathway <- factor(top_hallmark$pathway, levels = top_hallmark$pathway)
+  names(top_hallmark)[3] <- "-log10(p-value)"
+  
+  ##Create bar plot
+  plot <- ggplot(top_hallmark, aes(x = pathway, y = `-log10(p-value)`,
+                                   fill = `-log10(p-value)`)) + 
+    geom_bar(stat = "identity") + 
+    coord_flip() + 
+    theme_minimal() + 
+    ggtitle("ORA Metabolites Top Pathways") +
+    scale_fill_gradient(low="grey", high="darkred")
+  
+#  ggsave("top_pathways.png", plot = plot,
+#         path = "results/", scale = 1, dpi = 300, limitsize = TRUE)
+  
+  return(plot)
 }
