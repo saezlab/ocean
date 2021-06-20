@@ -1,8 +1,8 @@
 ########################## ocEAn Tutorial ORA ##################################
 
 ## install ocEAn
-#library(devtools)
-#install_github("saezlab/ocean")
+library(devtools)
+install_github("saezlab/ocean")
 
 
 ## Tutorial with a kidney cancer toy metabolomic dataset
@@ -31,22 +31,19 @@ t_table <- t_table_metactivity_input_formater(metabolomic_t_table = t_table,
                                               mapping_table = mapping_table,
                                               affixes = c("c","l","x","m","e","n","r"))
 
+##Select all pathways from recon2_redhuman$pathway to be included in network
+all_pathways <- as.vector(unique(recon2_redhuman$pathway))
+all_pathways <- all_pathways[!is.na(all_pathways)] #remove rows with NA
 
-## These are the available pathways to choose from
-View(unique(recon2_redhuman$pathway))
-
-##Select pathways relevant to include in network
-TCA_network <- model_to_pathway_sif(pathway_to_keep = c("Citric acid cycle",
-                                                        "Glycolysis/gluconeogenesis",
-                                                        "Pyruvate metabolism",
-                                                        "Transport, mitochondrial"))
+##Create network with metabolites/enzymes as sources/targets
+network <- model_to_pathway_sif(pathway_to_keep = all_pathways)
 
 ##Translate enzyme complexes by mapping identifiers to names
-TCA_network_trans <- translate_complexes(TCA_network)
+network_trans <- translate_complexes(network)
 
 
 ##Create data frame metabolite - affiliated enzyme instead of source-target
-metabolites <- rearrange_dataframe(TCA_network_trans)
+metabolites <- rearrange_dataframe(network_trans)
 
 #rename metabolites column for translation
 colnames(metabolites)[colnames(metabolites) == "metabolites"] <- "targets" 
@@ -99,7 +96,6 @@ saveRDS(metabolites_pathway_df,"./results/metabolites_pathway_df.RData")
 ##Create a vector of all input metabolites (background)
 #translated metabolites from t-table are used because names from input could be slightly different
 metabolites_universe <- translated_results$t_table$metabolites 
-#metabolites_universe <- unlist(unique(metabolites_pathway_df$metabolites))  # all input metabolites belonging to pathways
 
 
 ##Create a vector of all significant metabolites
@@ -107,16 +103,11 @@ p_value <- 2.0 #define cutoff p-value
 metabolites_significant_df <- translated_results$t_table[translated_results$t_table$tumorVsHealthy <= -p_value | translated_results$t_table$tumorVsHealthy >= p_value, ] 
 metabolites_significant <- unique(metabolites_significant_df$metabolites)
 
-##Select pathways relevant to include in ORA
-View(unique(metabolites_pathway_df[,"pathway", drop=F]))
-pathways <- metabolites_pathway_df[metabolites_pathway_df$pathway %in% c("KEGG_CITRATE_CYCLE_TCA_CYCLE",
-                                                                         "KEGG_GLYCOLYSIS_GLUCONEOGENESIS",
-                                                                         "KEGG_PYRUVATE_METABOLISM"), ]
 
 ##We perform the ORA with Fisher's exact test (from piano package)
 sig_pathways <- runGSAhyper(genes = metabolites_significant, 
                             universe = metabolites_universe,
-                            gsc = loadGSC(pathways),
+                            gsc = loadGSC(metabolites_pathway_df),
                             adjMethod = "fdr")
 sig_pathways_df <- as.data.frame(sig_pathways$resTab)  %>% 
   tibble::rownames_to_column(var = "pathway")

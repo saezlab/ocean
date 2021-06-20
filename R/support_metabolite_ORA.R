@@ -127,21 +127,15 @@ map_pathways_to_metabolites <- function(metab_df){
 
 barplot_pathways <- function(sigPathwaysDf){
   
-  ##Filtering out top pathways (max. 20) by Adjusted p-value
+  ##Filtering out top pathways (max. 20) by p-value
   sigPathwaysDf <- sigPathwaysDf[order(sigPathwaysDf$'Adjusted p-value'),]
   top_hallmark <- sigPathwaysDf[1:20, c(7,1,2)]
   top_hallmark <- na.omit(top_hallmark)   #remove rows containing NA
   top_hallmark <- top_hallmark[order(top_hallmark$'p-value', decreasing = TRUE),]
   
-  ##Write pathways with capital letter and without underscore
-  top_hallmark$pathway <- tolower(top_hallmark$pathway)
-  top_hallmark$pathway <- gsub("(^|\\p{P})(.)",
-                               "\\1\\U\\2",    
-                               top_hallmark$pathway, perl = TRUE)
-  top_hallmark$pathway <- gsub("_"," ",top_hallmark$pathway)
-  
   top_hallmark$`p-value` <- -log10(top_hallmark$`p-value`)
   top_hallmark$pathway <- factor(top_hallmark$pathway, levels = top_hallmark$pathway)
+  top_hallmark <- top_hallmark[top_hallmark[3] != 0.00, ] 
   names(top_hallmark)[3] <- "-log10(p-value)"
   
   ##Create bar plot
