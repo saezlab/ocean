@@ -16,11 +16,6 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-library(ocean)
-library(dplyr)
-library(magrittr)
-library(sjmisc)   
-
 
 #' \code{translate_complexes}
 #'
@@ -30,6 +25,10 @@ library(sjmisc)
 #'
 #' @param Network source/target network containing enzymes, complexes, metabolites
 #' @return source/target network containing enzymes, translated complexes, metabolites
+#' @export
+#' @import dplyr
+#' @import magrittr
+#' @import sjmisc
 
 translate_complexes <- function(Network){
   

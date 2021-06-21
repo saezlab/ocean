@@ -16,10 +16,6 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-library(ocean)
-library(dplyr)
-library(sjmisc)   
-library(ggplot2)
 
 
 #' \code{rearrange_dataframe}
@@ -28,8 +24,10 @@ library(ggplot2)
 #' identifiers to their enzyme name using recon2_redhuman, and give back the full 
 #' source/target network with enzymes, metabolites and translated complexes.
 #'
-#' @param Network source/target network containing enzymes and metabolites
+#' @param network source/target network containing enzymes and metabolites
 #' @return data frame with metabolites and their target/source enzymes
+#' @export
+#' @import sjmisc
 
 rearrange_dataframe <- function(network){
   
@@ -60,12 +58,38 @@ rearrange_dataframe <- function(network){
 
 
 
+#' \code{get_pure_kegg_ids}
+#'
+#' Function to remove the compartment information and "cpd:" from a column with
+#' metabolites identifiers in order to get pure KEGG ids
+#'
+#' @param metabolites_col column in a data frame containing metabolite ids
+#' @return column in a data frame containing KEGG ids
+#' @export
+
+get_pure_kegg_ids <- function(metabolites_col){
+  
+  metabolites_col <- sapply(metabolites_col, function(x){
+                                            x <- gsub("_.$","",x)
+                                            x <- gsub("cpd:","",x)
+                                            return(x)
+                                            }, simplify = F, USE.NAMES = F)
+  metabolites_col <- unlist(metabolites_col)
+  
+  return(metabolites_col)
+}
+
+
+
 #'\code{map_pathways_to_metabolites}
 #'
-#'Function to map pathways to enzymes and then to metabolites.
+#'Function to map pathways to enzymes and subsequently to metabolites.
 #'
 #'@param  metab_df data frame with metabolites and their target/source enzymes 
 #'@return data frame containing metabolites and their pathways
+#'@export
+#'@import sjmisc
+#'@import dplyr
 
 map_pathways_to_metabolites <- function(metab_df){
   
@@ -97,7 +121,7 @@ map_pathways_to_metabolites <- function(metab_df){
   metab_df <- distinct(metab_df)
   
 
-  ##Add new column "pathways" by merging data frame with kegg pathways (by enzymes)
+  ##Add new column "pathways" by merging data frame with KEGG pathways (by enzymes)
   metab_pathway_df = merge(metab_df[, c("enzymes", "metabolites")], 
                            kegg_pathways[, c("gene", "term")], 
                            by.x = "enzymes",         
@@ -116,7 +140,7 @@ map_pathways_to_metabolites <- function(metab_df){
   return(metab_pathway_df)
 }
 
-
+                                                                                                      
 
 #'\code{barplot_pathways}
 #'
@@ -124,19 +148,21 @@ map_pathways_to_metabolites <- function(metab_df){
 #'
 #'@param sigPathwaysDf  Data frame containing all significant pathways as a result of the ORA
 #'@return Bar plot of the most significant pathways by -log10(p-value)
+#'@export
+#'@import ggplot2
 
 barplot_pathways <- function(sigPathwaysDf){
   
   ##Filtering out top pathways (max. 20) by p-value
   sigPathwaysDf <- sigPathwaysDf[order(sigPathwaysDf$'Adjusted p-value'),]
-  top_hallmark <- sigPathwaysDf[1:20, c(7,1,2)]
+  top_hallmark <- sigPathwaysDf[1:20, c(1,2)]
   top_hallmark <- na.omit(top_hallmark)   #remove rows containing NA
   top_hallmark <- top_hallmark[order(top_hallmark$'p-value', decreasing = TRUE),]
   
   top_hallmark$`p-value` <- -log10(top_hallmark$`p-value`)
   top_hallmark$pathway <- factor(top_hallmark$pathway, levels = top_hallmark$pathway)
-  top_hallmark <- top_hallmark[top_hallmark[3] != 0.00, ] 
-  names(top_hallmark)[3] <- "-log10(p-value)"
+  top_hallmark <- top_hallmark[top_hallmark[2] != 0.00, ] 
+  names(top_hallmark)[2] <- "-log10(p-value)"
   
   ##Create bar plot
   plot <- ggplot(top_hallmark, aes(x = pathway, y = `-log10(p-value)`,
@@ -144,7 +170,7 @@ barplot_pathways <- function(sigPathwaysDf){
     geom_bar(stat = "identity") + 
     coord_flip() + 
     theme_minimal() + 
-    ggtitle("ORA Metabolites Top Pathways") +
+    ggtitle("Pathways Metabolite Enrichment") +
     scale_fill_gradient(low="grey", high="darkred")
   
 #  ggsave("top_pathways.png", plot = plot,

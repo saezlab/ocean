@@ -9,13 +9,12 @@
 #'       This is similar to Kinase-substrate and TF-targets enrichment analyses.
 
 ## install ocEAn
-#library(devtools)
-#install_github("saezlab/ocean")
+library(devtools)
+install_github("saezlab/ocean")
 
 
 ## Tutorial with a kidney cancer toy metabolomic dataset
 library(ocean)
-source("./R/translate_complexes.R")
 
 
 ##Differential analysis
