@@ -140,41 +140,35 @@ map_pathways_to_metabolites <- function(metab_df){
   return(metab_pathway_df)
 }
 
-                                                                                                      
 
-#'\code{barplot_pathways}
+
+#'\code{plot_significant_pathways}
 #'
-#'Function to plot the pathways which are significantly overexpressed
+#'Function to plot the interesting pathways after metabolite enrichment analysis
 #'
-#'@param sigPathwaysDf  Data frame containing all significant pathways as a result of the ORA
-#'@return Bar plot of the most significant pathways by -log10(p-value)
+#'@param enrichmentDF  Data frame containing all significant pathways 
+#'@return Bar plot of the most significant pathways by enrichment score
 #'@export
 #'@import ggplot2
 
-barplot_pathways <- function(sigPathwaysDf){
+plot_significant_pathways <- function(enrichmentDF, score){
   
-  ##Filtering out top pathways (max. 20) by p-value
-  sigPathwaysDf <- sigPathwaysDf[order(sigPathwaysDf$'Adjusted p-value'),]
-  top_hallmark <- sigPathwaysDf[1:20, c(1,2)]
-  top_hallmark <- na.omit(top_hallmark)   #remove rows containing NA
-  top_hallmark <- top_hallmark[order(top_hallmark$'p-value', decreasing = TRUE),]
+  ##Filter interesting pathways by using the enrichment score
+  top_pathways <- enrichmentDF[enrichmentDF$score <= -score | enrichmentDF$score >= score, ]
   
-  top_hallmark$`p-value` <- -log10(top_hallmark$`p-value`)
-  top_hallmark$pathway <- factor(top_hallmark$pathway, levels = top_hallmark$pathway)
-  top_hallmark <- top_hallmark[top_hallmark[2] != 0.00, ] 
-  names(top_hallmark)[2] <- "-log10(p-value)"
+  ##Sort pathways
+  top_pathways$pathway <- factor(top_pathways$pathway,                                    
+                                 levels = top_pathways$pathway[order(top_pathways$score,
+                                                                     decreasing = FALSE)])
   
-  ##Create bar plot
-  plot <- ggplot(top_hallmark, aes(x = pathway, y = `-log10(p-value)`,
-                                   fill = `-log10(p-value)`)) + 
-    geom_bar(stat = "identity") + 
-    coord_flip() + 
-    theme_minimal() + 
-    ggtitle("Pathways Metabolite Enrichment") +
-    scale_fill_gradient(low="grey", high="darkred")
-  
-#  ggsave("top_pathways.png", plot = plot,
-#         path = "results/", scale = 1, dpi = 300, limitsize = TRUE)
+  plot <- ggplot(top_pathways,
+                 aes(x = pathway, y = `score`, fill = `score`)) + 
+          geom_bar(stat = "identity") + 
+          coord_flip() + 
+          theme_minimal() + 
+          ggtitle("Pathways Metabolite Enrichment") +
+          scale_colour_gradient2(low="darkblue", mid="whitesmoke", high="indianred",
+                                 midpoint = 0, aesthetics="fill")
   
   return(plot)
 }
