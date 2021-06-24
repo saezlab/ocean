@@ -4,7 +4,9 @@ library(ocean)
 unique(toy_targets$condition)
 comparisons <- list('tumorVsHealthy' = c(1,-2))
 
-limmaRes <- runLimma(measurements = toy_metabolomic_data, targets = toy_targets, comparisons = comparisons)
+limmaRes <- runLimma(measurements = toy_metabolomic_data,
+                     targets = toy_targets,
+                     comparisons = comparisons)
 
 ##Format differeential anaylsis result
 t_table <- ttop_list_to_t_table(
@@ -59,18 +61,19 @@ penalty <- 6 #has be between penalty_min and penalty_max and integer
 
 regulons_df <- prepare_regulon_df(reaction_set_list_merged, penalty, c(0,1))
 
-##Compute metabolic enzme enrichment score
+##Compute metabolic enzyme enrichment score
 metactivity_res <- metactivity(metabolomic_t_table = t_table, 
                                regulons_df = regulons_df, 
                                compartment_pattern = "_[a-z]$", 
                                k = 1000)
 
 mean_ES_df <- metactivity_res$ES
-
 mean_NES_df <- metactivity_res$NES
 
 ##translate the metabolic ids back to names
-translated_results <- translate_results(regulons_df = regulons_df, t_table = t_table, mapping_table = mapping_table)
+translated_results <- translate_results(regulons_df = regulons_df,
+                                        t_table = t_table,
+                                        mapping_table = mapping_table)
 
 ##Visualise results for single enzmes
 plots <- plotMetaboliteContribution(enzyme = '4967_1738_8050_1743', 

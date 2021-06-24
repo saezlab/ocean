@@ -217,7 +217,7 @@ limma_res_to_ttop_list <- function(limma_res, comp_names, number, adjust.method 
   n_comp <- length(limma_res[[2]][1,])
   for(i in 1:n_comp)
   {
-    ttop_list[[i]] <- ttopFormatter(topTable(limmaRes[[1]], coef = i, number = number, adjust.method = adjust.method))
+    ttop_list[[i]] <- ttopFormatter(topTable(limma_res[[1]], coef = i, number = number, adjust.method = adjust.method))
     ttop_list[[i]] <- ttop_list[[i]][complete.cases(ttop_list[[i]]),]
   }
   names(ttop_list) <- comp_names
