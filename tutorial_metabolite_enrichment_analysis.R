@@ -33,20 +33,18 @@ t_table <- t_table_metactivity_input_formater(metabolomic_t_table = t_table,
 all_pathways <- as.vector(unique(recon2_redhuman$pathway))
 all_pathways <- all_pathways[!is.na(all_pathways)] 
 
-##Create network with metabolites/enzymes as sources/targets
-network <- model_to_pathway_sif(pathway_to_keep = all_pathways)
+##Create a reaction network from the recon_redhuman model (metabolites & enzymes)
+reaction_network <- model_to_pathway_sif(pathway_to_keep = all_pathways)
 
 ##Translate enzyme complexes by mapping identifiers to names
-network_trans <- translate_complexes(network)
+reaction_network <- translate_complexes(reaction_network)
 
 ##Create data frame metabolite - affiliated enzyme instead of source-target
-metabolites <- rearrange_dataframe(network_trans)
+metabolites <- rearrange_dataframe(reaction_network)
 
 ##Remove compartment information and "cpd:" to get pure KEGG IDs
 metabolites$metabolites <- get_pure_kegg_ids(metabolites$metabolites)
-
-##Keep only unique rows
-metabolites <- distinct(metabolites) 
+metabolites <- distinct(metabolites)  #keep only unique rows
 
 ##Map pathways to metabolites
 metabolites_pathway_df <- map_pathways_to_metabolites(metabolites)
