@@ -180,8 +180,13 @@ prepare_regulon_df <- function(reaction_set_list_merged, penalty, filter_imbalan
 #' @return ipsum...
 #' @export
 #' @importFrom reshape2 dcast
-metactivity <- function(metabolomic_t_table, regulons_df, compartment_pattern = "", k = 1000)
+metactivity <- function(metabolomic_t_table,
+                        regulons_df,
+                        compartment_pattern = "",
+                        k = 1000,
+                        seed = 1337)
 {
+  set.seed(seed)
   enzymes_nes_list <- list()
   enzymes_es_list <- list()
   for(i in 2:length(metabolomic_t_table[1,]))
