@@ -8,7 +8,8 @@ metactivity(
   metabolomic_t_table,
   regulons_df,
   compartment_pattern = "",
-  k = 1000
+  k = 1000,
+  seed = 1337
 )
 }
 \arguments{

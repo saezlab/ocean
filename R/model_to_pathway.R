@@ -41,7 +41,7 @@ model_to_pathway_sif <- function(pathway_to_keep,
   
   pathways <- pathways[index_to_keep,, drop = F]
   
-  stochio <- stochio[,index_to_keep]
+  stochio <- stochio[,index_to_keep,drop = F]
   
   ####
   
@@ -65,7 +65,7 @@ model_to_pathway_sif <- function(pathway_to_keep,
   for(i in 1:length(gprs[,1]))
   {
     recon1_reactions[[i]] <- list()
-    reactants <- as.numeric(row.names(stochio[stochio[,i] <= -1,]))
+    reactants <- as.numeric(row.names(stochio[stochio[,i] <= -1,,drop = F]))
     
     if(!identical(reactants, numeric(0)))
     {
@@ -78,7 +78,7 @@ model_to_pathway_sif <- function(pathway_to_keep,
     }
     
     
-    products <- as.numeric(row.names(stochio[stochio[,i] >= 1,]))
+    products <- as.numeric(row.names(stochio[stochio[,i] >= 1,,drop = F]))
     
     if(!identical(products, numeric(0)))
     {
