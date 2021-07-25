@@ -20,12 +20,12 @@
 
 #' \code{rearrange_dataframe}
 #'
-#' Function to separate the complexes into a vector of enzyme strings, map the
-#' identifiers to their enzyme name using recon2_redhuman, and give back the full 
-#' source/target network with enzymes, metabolites and translated complexes.
+#' Function to rearrange the data frame to obtain an enzyme/metabolite df
+#' instead of a source/target df, i.e. all enzymes are in one column
+#' and all metabolites in the second column.
 #'
 #' @param network source/target network containing enzymes and metabolites
-#' @return data frame with metabolites and their target/source enzymes
+#' @return data frame with metabolites and their source/target enzymes
 #' @export
 #' @import sjmisc
 
