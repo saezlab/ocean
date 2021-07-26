@@ -20,7 +20,7 @@ Instal the package (from github with remotes) :
 install.packages("remotes")
 install.packages("BiocManager")
 
-## instal COSMOS
+## instal ocean
 remotes::install_github("saezlab/ocean", repos = BiocManager::repositories())
 ```
 
