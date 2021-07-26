@@ -13,15 +13,15 @@ The functional insights that metabolomic data sets contain currently lies under-
 
 ## Tutorial
 
-Instal the package (from github with devtools) :
+Instal the package (from github with remotes) :
 
 ```r
-## If needed instal devtool package
-install.packages("devtools")
+## If needed install the remotes and BiocManager packages
+install.packages("remotes")
+install.packages("BiocManager")
 
 ## instal COSMOS
-library(devtools)
-install_github("saezlab/ocean")
+remotes::install_github("saezlab/ocean", repos = BiocManager::repositories())
 ```
 
 You can then run the tutorial scripts with a kidney cancer toy metabolomic dataset: https://github.com/saezlab/ocean/blob/master/tutorial_submodules.R
