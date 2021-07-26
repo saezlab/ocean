@@ -4,10 +4,13 @@
 \alias{map_pathways_to_metabolites}
 \title{\code{map_pathways_to_metabolites}}
 \usage{
-map_pathways_to_metabolites(metab_df)
+map_pathways_to_metabolites(metab_df, pathways = redHuman_pathways)
 }
 \arguments{
 \item{metab_df}{data frame with metabolites and their target/source enzymes}
+
+\item{pathways}{the pathway collection to be used to create a
+metabolite/pathway table. by default the pathway ontology of redHuman is used.}
 }
 \value{
 data frame containing metabolites and their pathways

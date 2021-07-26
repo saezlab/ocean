@@ -86,12 +86,14 @@ get_pure_kegg_ids <- function(metabolites_col){
 #'Function to map pathways to enzymes and subsequently to metabolites.
 #'
 #'@param  metab_df data frame with metabolites and their target/source enzymes 
+#'@param pathways the pathway collection to be used to create a
+#' metabolite/pathway table. by default the pathway ontology of redHuman is used.
 #'@return data frame containing metabolites and their pathways
 #'@export
 #'@import sjmisc
 #'@import dplyr
 
-map_pathways_to_metabolites <- function(metab_df){
+map_pathways_to_metabolites <- function(metab_df, pathways = redHuman_pathways){
   
   metab_df$enzymes <- gsub(">.*","",metab_df$enzymes) #delete ">" and digits behind
   metab_df$enzymes <- gsub("_reverse","",metab_df$enzymes) #delete "_reverse"
@@ -120,10 +122,11 @@ map_pathways_to_metabolites <- function(metab_df){
   ##Keep only unique rows (if a complex consisted of two or more similar enzymes)
   metab_df <- distinct(metab_df)
   
-
+  names(pathways) <- c("gene", "term")
+  
   ##Add new column "pathways" by merging data frame with KEGG pathways (by enzymes)
   metab_pathway_df = merge(metab_df[, c("enzymes", "metabolites")], 
-                           kegg_pathways[, c("gene", "term")], 
+                           pathways[, c("gene", "term")], 
                            by.x = "enzymes",         
                            by.y = "gene",
                            all.x = TRUE)      
