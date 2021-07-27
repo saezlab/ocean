@@ -3,6 +3,7 @@
 export(compress_transporters)
 export(condense_metabolite_set)
 export(forestMaker)
+export(generate_sifAtt)
 export(get_pure_kegg_ids)
 export(limma_res_to_ttop_list)
 export(map_pathways_to_metabolites)
