@@ -40,8 +40,8 @@ t_table <- t_table_metactivity_input_formater(metabolomic_t_table = t_table,
                                               affixes = c("c","l","x","m","e","n","r"))
 
 ##Prepare the metabolic enzyme sets
-penalty_min <- 6 #minimum 1 and integer
-penalty_max <- 6 #maximum 9 and integer
+penalty_min <- 8 #minimum 1 and integer
+penalty_max <- 8 #maximum 9 and integer
 
 ##These are the available pathways to choose from
 View(unique(recon2_redhuman$pathway))
@@ -80,7 +80,7 @@ reaction_set_list <- prepare_metabolite_set(penalty_range = penalty_min:penalty_
 
 reaction_set_list_merged <- condense_metabolite_set(reaction_set_list = reaction_set_list)
 
-penalty <- 6 #has to be between penalty_min and penalty_max and integer
+penalty <- 8 #has to be between penalty_min and penalty_max and integer
 
 regulons_df <- prepare_regulon_df(reaction_set_list_merged, penalty, c(0,1))
 
