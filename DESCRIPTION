@@ -16,12 +16,14 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    cowplot,
     dplyr,
     ggplot2,
     ggrepel,
     limma,
     magrittr,
     reshape2,
+    sjmisc,
     stringr
 Suggests: 
     testthat (>= 3.0.0),
