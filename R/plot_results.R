@@ -8,7 +8,8 @@
 #' @return ipsum...
 #' @export
 #' @importFrom stringr str_extract
-translate_results <- function(regulons_df, t_table, mapping_table)
+#' @import dplyr
+translate_results <- function(regulons_df, t_table, mapping_table, compress_compartments = F)
 {
   mapping_vec <- mapping_table$metab
   names(mapping_vec) <- mapping_table$KEGG
@@ -53,6 +54,19 @@ translate_results <- function(regulons_df, t_table, mapping_table)
   
   t_table_with_names$KEGG <- as.character(t_table_with_names$KEGG)
   regulons_df_with_names$targets <- as.character(regulons_df_with_names$targets)
+  
+  if(compress_compartments)
+  {
+    regulons_df_with_names$ID <- paste(regulons_df_with_names$set, gsub("_[a-z]$","",regulons_df_with_names$targets), sep = "___")
+    regulons_df_with_names <- regulons_df_with_names[,-c(1,2)]
+    
+    regulons_df_with_names <- regulons_df_with_names %>% dplyr::group_by(ID) %>% dplyr::summarise_each(funs(mean(., na.rm = TRUE)))
+    regulons_df_with_names <- as.data.frame(regulons_df_with_names)
+    
+    regulons_df_with_names$set <- gsub("___.*","",regulons_df_with_names$ID)
+    regulons_df_with_names$targets <- gsub(".*___","",regulons_df_with_names$ID)
+    regulons_df_with_names <- regulons_df_with_names[,c(3,4,2)]
+  }
   
   return(list('t_table' = t_table_with_names, "regulons_df" = regulons_df_with_names))
 }

@@ -4,7 +4,12 @@
 \alias{translate_results}
 \title{translate_results}
 \usage{
-translate_results(regulons_df, t_table, mapping_table)
+translate_results(
+  regulons_df,
+  t_table,
+  mapping_table,
+  compress_compartments = F
+)
 }
 \arguments{
 \item{regulons_df}{ipsum...}

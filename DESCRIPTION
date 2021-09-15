@@ -22,7 +22,8 @@ Imports:
     limma,
     magrittr,
     reshape2,
-    stringr
+    stringr,
+    igraph
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
