@@ -16,6 +16,7 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    cowplot,
     dplyr,
     ggplot2,
     ggrepel,
@@ -23,7 +24,8 @@ Imports:
     magrittr,
     reshape2,
     stringr,
-    igraph
+    igraph,
+    sjmisc,
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
