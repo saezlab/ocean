@@ -640,3 +640,85 @@ split_transaminases <- function(sub_network_nocofact)
   return(sub_network_nocofact)
 }
 
+#'\code{nitrogen_tracking}
+#'
+#' This function cross link transamination metabolites to track amine groups
+#'
+#' @param sub_network_nocofact  ipsum...
+#' @return ipsum...
+#' @export
+nitrogen_tracking <- function(sub_network_nocofact)
+{
+  sub_net <- sub_network_nocofact$reaction_network
+  
+  transaminases_net <- sub_net[grepl("C0002[56]",sub_net$source) |
+                                 grepl("C0002[56]",sub_net$target),]
+  
+  
+  
+  
+  transaminases_potential <- unique(c(transaminases_net$source,transaminases_net$target))
+  transaminases_potential <- transaminases_potential[!grepl("cpd:",transaminases_potential)]
+  
+  transaminases_net <- sub_net[sub_net$source %in% transaminases_potential |
+                                 sub_net$target %in% transaminases_potential,]
+  
+  sub_net_no_transaminase <- sub_net[!(sub_net$source %in% transaminases_potential |
+                                         sub_net$target %in% transaminases_potential),]
+  
+  
+  splitted_transaminase <- sapply(transaminases_potential, function(transaminase, transaminases_net){
+    sub_net_transaminase <- transaminases_net[transaminase == transaminases_net$source |
+                                                transaminase == transaminases_net$target,]
+    
+    columns <- c(1,2)
+    
+    elements <- unique(c(sub_net_transaminase[,1],sub_net_transaminase[,2]))
+    
+    if(sum(grepl("cpd:C00025_.",elements)) & sum(grepl("cpd:C00026_.",elements)))
+    {
+      if(sum(grepl("C00025",sub_net_transaminase[,1])) > 0)
+      {
+        for(i in 1:length(sub_net_transaminase[,1]))
+        {
+          if(grepl("C00025",sub_net_transaminase[i,1]))
+          {
+            sub_net_transaminase[i,2] <- paste(sub_net_transaminase[i,2],"_nitro",sep = "")
+          } 
+          if(!grepl("C00026",sub_net_transaminase[i,2]) & grepl("cpd:C",sub_net_transaminase[i,2]))
+          {
+            sub_net_transaminase[i,1] <- paste(sub_net_transaminase[i,1],"_nitro",sep = "")
+          } 
+        }
+      }else
+      {
+        for(i in 1:length(sub_net_transaminase[,1]))
+        {
+          if(grepl("C00025",sub_net_transaminase[i,2]))
+          {
+            sub_net_transaminase[i,1] <- paste(sub_net_transaminase[i,1],"_nitro",sep = "")
+          } 
+          if(!grepl("C00026",sub_net_transaminase[i,1]) & grepl("cpd:C",sub_net_transaminase[i,1]))
+          {
+            sub_net_transaminase[i,2] <- paste(sub_net_transaminase[i,2],"_nitro",sep = "")
+          } 
+        }
+      }
+    }
+    return(sub_net_transaminase)
+  }, transaminases_net = transaminases_net, USE.NAMES = T, simplify = F)
+  
+  splitted_transaminase <- as.data.frame(do.call(rbind,splitted_transaminase))
+  
+  sub_network_nocofact$reaction_network <- as.data.frame(rbind(sub_net_no_transaminase, splitted_transaminase))
+  
+  sub_network_nocofact$reaction_network <- unique(sub_network_nocofact$reaction_network)
+  
+  network_attributes <- as.data.frame(cbind(unique(c(sub_network_nocofact$reaction_network[,1],sub_network_nocofact$reaction_network[,2])),NA))
+  network_attributes[,2] <- ifelse(grepl("cpd:",network_attributes[,1]), "metabolite","reaction_enzyme")
+  names(network_attributes) <- names(sub_network_nocofact$attributes)
+  
+  sub_network_nocofact$attributes <- network_attributes
+  
+  return(sub_network_nocofact)
+}
