@@ -94,15 +94,15 @@ model_to_pathway_sif <- function(pathway_to_keep,
     
     reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Valine leucine and isoleucine metabolism"]])) #add bcat1 reverse
     
-    reactions_df <- reactions_df[reactions_df[,1] != "1629_594_593_1738" & #remove the wrong BCKDH complex and correct it
-                                   reactions_df[,2] != "1629_594_593_1738" &
-                                   reactions_df[,1] != "1629_1738_594_593" &
-                                   reactions_df[,2] != "1629_1738_594_593",]
+    # reactions_df <- reactions_df[reactions_df[,1] != "1629_594_593_1738" & #remove the wrong BCKDH complex and correct it
+    #                                reactions_df[,2] != "1629_594_593_1738" &
+    #                                reactions_df[,1] != "1629_1738_594_593" &
+    #                                reactions_df[,2] != "1629_1738_594_593",]
     
     reactions_df <- reactions_df[!grepl("CRAT.*_reverse",reactions_df[,1]) & #remove reverse crat
                                    !grepl("CRAT.*_reverse",reactions_df[,2]),]
     
-    reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["BCKDH"]])) #add correct BCKDH
+    # reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["BCKDH"]])) #add correct BCKDH
   }
   ###
   return(reactions_df)
