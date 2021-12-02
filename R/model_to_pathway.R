@@ -45,305 +45,29 @@ model_to_pathway_sif <- function(pathway_to_keep,
   
   ####
   
-  gprs <- as.data.frame(cbind(rxns,rules))
-  
-  names(gprs) <- c("Reactions","Genes")
-  
-  gprs$Genes <- gsub("[()]","", gprs$Genes)
-  
-  gprs$Genes <- gsub(" or ",";",gprs$Genes)
-  gprs$Genes <- gsub(" and ","_",gprs$Genes)
-  gprs$Genes <- gsub("[.][0-9]","",gprs$Genes)
-  
-  gprs$direction <- minmax$direction
-  
-  gprs$pathway <- pathways
-  
+  print("Building gprs...")
+  gprs <- build_grps(rxns, rules, minmax, pathways)
   ####
   
-  recon1_reactions <- list()
-  for(i in 1:length(gprs[,1]))
-  {
-    recon1_reactions[[i]] <- list()
-    reactants <- as.numeric(row.names(stochio[stochio[,i] <= -1,,drop = F]))
-    
-    if(!identical(reactants, numeric(0)))
-    {
-      reactants <- metab[reactants,]
-      recon1_reactions[[i]]$reactants <- reactants
-    }
-    else
-    {
-      recon1_reactions[[i]]$reactants <- NA
-    }
-    
-    
-    products <- as.numeric(row.names(stochio[stochio[,i] >= 1,,drop = F]))
-    
-    if(!identical(products, numeric(0)))
-    {
-      products <- metab[products,]
-      recon1_reactions[[i]]$products<- products
-    }
-    else
-    {
-      recon1_reactions[[i]]$products <- NA
-    }
-    recon1_reactions[[i]]$direction <- minmax[i,3]
-  }
-  names(recon1_reactions) <- gprs$Reactions
-  
-  for(i in 1:length(recon1_reactions))
-  {
-    reaction <- names(recon1_reactions)[i]
-    
-    recon1_reactions[[i]]$genes <- gprs[gprs$Reactions == reaction,2]
-  }
-  
+  print("Building reaction list...")
+  reactions_list <- build_reactions_list(gprs, stochio, metab, minmax)
   ###
   
-  SLC_vec <- unique(mapping[grepl("SLC[0-9]",mapping$name),1])
-  SLC_vec <- c(SLC_vec,
-               "340024_57393",
-               "59272",
-               "9057_6520",
-               "6520_56301",
-               "56301_6520",
-               "9057_6520",
-               "8140_6520",
-               "6520_23428",
-               "6520_8140",
-               "9056_6519",
-               "6579",
-               "23428_6520",
-               "11136_6519")
-  
+  print("Building reaction data frame...")
+  reactions_df <- build_reactions_df(reactions_list, mapping)
   ###
   
-  
-  reactions_df <- as.data.frame(matrix(NA,0,2)) 
-  
-  genes_memory <- c()
-  z <- 1
-  m <- 1
-  for(reaction in recon1_reactions)
-  {
-    if(!is.null(reaction$reactants) &!is.null(reaction$products))
-    {
-      if(!is.null(reaction) & !is.na(reaction$genes))
-      {
-        genes <- strsplit(reaction$genes,";")
-        genes <- genes[[1]]
-      }
-      else
-      {
-        # genes <- reaction$id
-        genes <- names(recon1_reactions)[m]
-      }
-      
-      if(reaction$direction == 1)
-      {
-        reaction$reversible <- FALSE
-        reactants <- reaction$reactants
-        products <- reaction$products
-      }
-      else
-      {
-        if(reaction$direction != 0)
-        {
-          reactants <- reaction$products
-          products <- reaction$reactants
-          reaction$reversible <- FALSE
-        }
-        else
-        {
-          reaction$reversible <- TRUE
-          reactants <- reaction$reactants
-          products <- reaction$products
-        }
-      }
-      
-      
-      reaction_df <- as.data.frame(matrix(NA,0,2))
-      
-      # print(genes)
-      
-      for(gene in genes)
-      {
-        # "6570" "6571" 
-        # if(gene == "6523")
-        # {
-        #   print(reaction)
-        # }
-        
-        if(!(gene %in% genes_memory))
-        {
-          genes_memory <- c(genes_memory, gene)
-        }
-        else
-        {
-          gene <- paste(gene,z,sep = ">")
-          genes_memory <- c(genes_memory, gene)
-          z <- z+1
-        }
-        
-        if(gsub("[>].*","",gene) %in% SLC_vec)
-        {
-          new_reaction_df <- as.data.frame(matrix(NA,length(reactants)+length(products), 2))
-          gene_i <- c()
-          for(i in 1:length(reactants))
-          {
-            if(length(reactants) == length(products))
-            {
-              gene_i <- c(gene_i,paste(gene,i,sep = "<"))
-            }
-            else
-            {
-              gene_i <- gene
-            }
-          }
-          new_reaction_df[1:length(reactants),2] <- gene_i
-          new_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1] <- gene_i
-          
-          new_reaction_df[1:length(reactants),1] <- reactants
-          new_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),2] <- products
-          
-          if(length(reactants) == length(products)) #this should fix the rare cases were the order or products was inverted
-          {
-            if(sum(gsub("_[cxrnme]","",reactants) == gsub("_[cxrnme]","",products)) != length(reactants))
-            {
-              new_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),2] <- products[length(products):1]
-            }
-          }
-          
-          reverse_reaction_df <- new_reaction_df
-          reverse_reaction_df[1:length(reactants),2] <- paste(reverse_reaction_df[1:length(reactants),2],"_reverse",sep = "")
-          reverse_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1] <- paste(reverse_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1],"_reverse",sep = "")
-          names(reverse_reaction_df) <- names(reverse_reaction_df)[c(2,1)]
-          
-          new_reaction_df <- as.data.frame(rbind(new_reaction_df,reverse_reaction_df))
-        }
-        else
-        {
-          new_reaction_df <- as.data.frame(matrix(NA,length(reactants)+length(products), 2))
-          new_reaction_df[1:length(reactants),2] <- gene
-          new_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1] <- gene
-          
-          new_reaction_df[1:length(reactants),1] <- reactants
-          new_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),2] <- products
-          
-          if(reaction$reversible)
-          {
-            reverse_reaction_df <- new_reaction_df
-            reverse_reaction_df[1:length(reactants),2] <- paste(reverse_reaction_df[1:length(reactants),2],"_reverse",sep = "")
-            reverse_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1] <- paste(reverse_reaction_df[(length(reactants)+1):((length(reactants)+1)+length(products)-1),1],"_reverse",sep = "")
-            names(reverse_reaction_df) <- names(reverse_reaction_df)[c(2,1)]
-            
-            new_reaction_df <- as.data.frame(rbind(new_reaction_df,reverse_reaction_df))
-          }
-        }
-        
-        reaction_df <- as.data.frame(rbind(reaction_df,new_reaction_df))
-      }
-      
-      reactions_df <- as.data.frame(rbind(reactions_df, reaction_df))
-      #print(length(reactions_df[,1]))
-    }
-    m <- m+1
-  }
-  
-  ###
-  
-  mapping_vec <- mapping$name
-  names(mapping_vec) <- mapping$X1
-  
-  for (i in 1:2)
-  {
-    for (j in 1:length(reactions_df[,1]))
-    {
-      if(grepl(">",reactions_df[j,i]))
-      {
-        affixe <- gsub(".+[>]","",reactions_df[j,i])
-        reactions_df[j,i] <- gsub("[>].*","",reactions_df[j,i])
-        has_affixe <- TRUE
-      }
-      else
-      {
-        if(grepl("<",reactions_df[j,i]))
-        {
-          affixe_lower <- gsub(".+[<]","",reactions_df[j,i])
-          reactions_df[j,i] <- gsub("[<].*","",reactions_df[j,i])
-          has_affixe_lower <- TRUE
-        }
-        else
-        {
-          has_affixe_lower <- FALSE
-        }
-        has_affixe <- FALSE
-      }
-      if(reactions_df[j,i] %in% names(mapping_vec))
-      {
-        if(has_affixe)
-        {
-          reactions_df[j,i] <- paste(mapping_vec[reactions_df[j,i]],affixe,sep = ">")
-        }
-        else
-        {
-          if(has_affixe_lower)
-          {
-            reactions_df[j,i] <- paste(mapping_vec[reactions_df[j,i]],affixe_lower,sep = "<")
-          }
-          else
-          {
-            reactions_df[j,i] <- mapping_vec[reactions_df[j,i]]
-          }
-        }
-      } else
-      {
-        if(has_affixe)
-        {
-          reactions_df[j,i] <- paste(reactions_df[j,i],affixe,sep = ">")
-        }
-        else
-        {
-          if(has_affixe_lower)
-          {
-            reactions_df[j,i] <- paste(reactions_df[j,i],affixe_lower,sep = "<")
-          }
-          else
-          {
-            reactions_df[j,i] <- reactions_df[j,i]
-          }
-        }
-      }
-      if(gsub("_reverse","",reactions_df[j,i]) %in% names(mapping_vec))
-      {
-        reactions_df[j,i] <- paste(mapping_vec[gsub("_reverse","",reactions_df[j,i])],"_reverse",sep = "")
-      }
-    }
-  }
+  # print("Converting network gene IDs...")
+  # reactions_df <- translate_network_gene_ids(reactions_df, mapping)
+
   
   reactions_df <- reactions_df[!grepl("HC0",reactions_df$V1) & !grepl("HC0",reactions_df$V2),]
   reactions_df <- reactions_df[complete.cases(reactions_df),]
   
   ###
   
-  recon1_metabolites_named_vec <- recon1_metabolites[,2]
-  names(recon1_metabolites_named_vec) <- recon1_metabolites[,1]
-  
-  names(recon1_metabolites_named_vec) <- gsub("__","_",names(recon1_metabolites_named_vec))
-  
-  for (i in 1:length(reactions_df[,1]))
-  {
-    if (reactions_df[i,1] %in% names(recon1_metabolites_named_vec))
-    {
-      reactions_df[i,1] <- recon1_metabolites_named_vec[reactions_df[i,1]]
-    }
-    if (reactions_df[i,2] %in% names(recon1_metabolites_named_vec))
-    {
-      reactions_df[i,2] <- recon1_metabolites_named_vec[reactions_df[i,2]]
-    }
-  }
+  print("Converting network metabolite IDs...")
+  reactions_df <- translate_network_metab_ids(reactions_df, recon1_metabolites)
   
   names(reactions_df) <- c("source","target")
   
@@ -355,14 +79,17 @@ model_to_pathway_sif <- function(pathway_to_keep,
   
   if("Urea cycle" %in% pathway_to_keep)
   {
+    print("Ataching Urea cycle additional reactions")
     reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Urea cycle"]]))
   }
   if("Purine synthesis" %in% pathway_to_keep)
   {
+    print("Ataching Purine synthesis additional reactions")
     reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Purine synthesis"]]))
   }
   if("Valine, leucine, and isoleucine metabolism" %in% pathway_to_keep)
   {
+    print("Ataching BCAA additional reactions")
     reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Carnitine synthesis"]])) #add ketoacid to carnitine
     
     reactions_df <- as.data.frame(rbind(reactions_df,network_supplements[["Valine leucine and isoleucine metabolism"]])) #add bcat1 reverse
@@ -401,12 +128,6 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
   
   compound_vec <- unique(compounds$compound)
   
-  # compound_list <- c()
-  # for( i in seq(1,length(compound_vec),10))
-  # {
-  #   compound_list <- c(compound_list, KEGGREST::keggGet(compound_vec[c(i:(i+9))]))
-  # }
-  
   bad_kegg_compounds <- list()
   for (compound in compound_list)
   {
@@ -430,10 +151,6 @@ remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
         bad_kegg_compounds[[compound$ENTRY[1]]] <- compound
       }
     }
-    # } else
-    # {
-    #   bad_kegg_compounds[[compound$ENTRY[1]]] <- compound
-    # }
   }
   
   bad_entries <- c()
