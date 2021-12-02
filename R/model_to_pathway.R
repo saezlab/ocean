@@ -15,7 +15,7 @@
 #' @export
 
 model_to_pathway_sif <- function(pathway_to_keep, 
-                                 pathways = recon2_redhuman$pathway, 
+                                 pathways = recon2_redhuman$pathway,  #redHuman_models folder
                                  rxns = recon2_redhuman$rxns,
                                  rules = recon2_redhuman$rules,
                                  minmax = recon2_redhuman$minmax,
