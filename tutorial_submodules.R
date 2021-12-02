@@ -118,7 +118,7 @@ plots <- plotMetaboliteContribution(enzyme = 'OGDH_DLD_PDH_DLST>1052', stat_df =
 plot(plots$scatter)
 
 plots <- plotMetaboliteContribution(enzyme = 'BCAT1', stat_df = translated_results$t_table, 
-                                    metabolite_sets = translated_regulons_df, 
+                                    metabolite_sets = translated_results$regulons_df, 
                                     contrast_index = 1, stat_name = 'Abundance Down <==> Up (t-value)', 
                                     scaling_factor = 6, nLabels =  25)
 
