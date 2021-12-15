@@ -261,9 +261,8 @@ compress_transporters <- function (sub_network_nocofact)
   network <- network[!grepl("^SLC", network$edgeId) & !grepl("_SLC", 
                                                              network$edgeId), ]
   sub_network_nocofact$reaction_network <- network[, -3]
-  sub_network_nocofact$attributes <- sub_network_nocofact$attributes[sub_network_nocofact$attributes[, 
-                                                                                                     1] %in% network[, 1] | sub_network_nocofact$attributes[, 
-                                                                                                                                                            1] %in% network[, 2], ]
+  sub_network_nocofact$attributes <- sub_network_nocofact$attributes[sub_network_nocofact$attributes[, 1] %in% network[, 1] | 
+                                                                       sub_network_nocofact$attributes[, 1] %in% network[, 2], ]
   new_transporters <- unique(c(network[, 1], network[, 2]))
   new_transporters <- new_transporters[grepl("transporter", 
                                              new_transporters)]

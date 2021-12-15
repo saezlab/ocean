@@ -227,8 +227,9 @@ metactivity <- function(metabolomic_t_table,
       row.names(t_table_with_null) <- t_table_with_null[,1]
       t_table_with_null <- t_table_with_null[,-1]
     }
-
+    
     regulons_df <- regulons_df[regulons_df[,2] %in% row.names(t_table_with_null),]
+    regulon_df_filtered <- regulons_df
 
     regulons_mat <- reshape2::dcast(regulons_df, targets~set, value.var = "weight")
     row.names(regulons_mat) <- regulons_mat[,1]
@@ -243,7 +244,6 @@ metactivity <- function(metabolomic_t_table,
     metabolites <- row.names(t_table_with_null)
     enzymes <- names(regulons_mat)
     t_table_with_null <- t(t_table_with_null)
-
     enzyme_ES <- as.matrix(t_table_with_null) %*% as.matrix(regulons_mat)
 
     enzymes_es_list[[i]] <- enzyme_ES[1,]

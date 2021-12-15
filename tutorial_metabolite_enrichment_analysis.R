@@ -8,7 +8,7 @@ install_github("saezlab/ocean")
 ##Tutorial with a kidney cancer toy metabolomic dataset
 library(ocean)
 library(decoupleR)
-
+library(dplyr)
 
 ##Differential analysis
 unique(toy_targets$condition)
@@ -73,21 +73,19 @@ t_table_kegg <- unique(t_table_kegg) #ensure only 1 kegg is mapped to 1 metaboli
 mat <- as.matrix(t_table_kegg)       #input 2: expression matrix
 
 ##Perform enrichment analysis
-enrichment <- run_mean(mat, network,
+enrichment <- run_wmean(mat, network,
                           .source = .data$pathway,
                           .target = .data$metabolites,
                           .mor = .data$mor, 
                           .likelihood = .data$likelihood,  
-                       times = 10000,            #number of permutations
-                       seed = 42,                #a single integer
-                       sparse = TRUE,
-                       randomize_type = "rows")  #randomize matrix
+                       times = 100)  #randomize matrix
+
 enrichment$condition <- NULL
 enrichment <- as.data.frame(enrichment)
 colnames(enrichment) <- c("statistic", "pathway", "score", "p-value")
 
 ##Keep only rows with statistic "normalized_mean"
-enrichment_norm <- enrichment[enrichment$statistic != "mean", ]
+enrichment_norm <- enrichment[enrichment$statistic == "norm_wmean", ]
 
 ##Visualize most significant pathways in a bar plot
 score <- 1.0  #define cutoff score
