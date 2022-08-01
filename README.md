@@ -34,3 +34,5 @@ and what information they contain.
 The manuscript associated with ocEAn will be available soon. Stay tuned !
 
 The underlying metabolic model is based on a curated reduced model of human metabolism, see: Masid M, Ataman M & Hatzimanikatis V (2020) Analysis of human metabolism by reducing the complexity of the genome-scale models using redHUMAN. Nat Commun 11: 2821 https://www.nature.com/articles/s41467-020-16549-2#Tab1
+
+The scripts to process the redHuman model into the oCEan format can be found here: https://github.com/saezlab/redHuman_models
