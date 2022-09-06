@@ -16,7 +16,9 @@ install_github("saezlab/ocean")
 ## Tutorial with a kidney cancer toy metabolomic dataset
 library(ocean)
 
-##Differential analysis
+##Differential analysis 
+#with data from: https://www.embopress.org/doi/full/10.15252/msb.20209730
+
 unique(toy_targets$condition)
 comparisons <- list('tumorVsHealthy' = c(1,-2))
 
@@ -24,15 +26,29 @@ limmaRes <- runLimma(measurements = toy_metabolomic_data,
                      targets = toy_targets,
                      comparisons = comparisons)
 
+#this differential anaylsis result represents metabolic up and down-regulations
+#of metabolite abundances in kidney tumor tissue compared to adjacent 
+#non-tumoral tissue
+
 ##Format differential analysis result
+
+#In order to assess the metabolic imbalance, we use the t statistic of the 
+#differential analysis. The t-statistic represents a good estimate of the 
+#relative significance of up and down-regulations of metabolic abundances.
+
 t_table <- ttop_list_to_t_table(
   limma_res_to_ttop_list(limma_res = limmaRes,
                          comp_names = names(comparisons),
                          number = length(toy_metabolomic_data[,1]),
                          adjust.method = "fdr"))
 
-##This step is particularly important because this is where the users metabolic identifiers are mapped to the kegg ids used by the method.
-#Thus, the user should provide a mapping table in the same format as the mapping_table presented here (you can look at it to inspire yourself from it)
+##Next, the metabolic names have to be converted to a standard identifer.
+#In this case, we use KEGG IDs. 
+#This step is particularly important because this is where the users 
+#metabolic identifiers are mapped to the kegg ids used by the method.
+
+#THE USER SHOULD PROVED A MAPPING TABLE IN THE SAME FORMAT AS THE ONE PRESENTED HERE
+#(you can look at it to inspire yourself from it).
 #The mapping table should map the users own metabolic identifiers to kegg compound IDs
 t_table <- t_table_metactivity_input_formater(metabolomic_t_table = t_table,
                                               mapping_table = mapping_table,
@@ -45,7 +61,8 @@ View(unique(recon2_redhuman$pathway))
 ######## SUBNETWORKS
 data(expressed_genes)
 
-# View(unique(recon2_redhuman$pathway))
+#In this case, we will use all pathways available. 
+#Users can restrict this list on a per-need basis.
 
 all_pathways <- unique(recon2_redhuman$pathway)
 sub_network <- model_to_pathway_sif(pathway_to_keep = all_pathways$X1)
