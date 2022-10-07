@@ -33,6 +33,8 @@ and what information they contain.
 
 ocEAn pre-print: Sciacovelli, Dugourd et al. Nitrogen partitioning between branched-chain amino acids and urea cycle enzymes sustains renal cancer progression; 2021 https://www.biorxiv.org/content/10.1101/2021.09.17.460635v1.full
 
+To reproduce the result of this manuscript, install ocEAn from the branch "marco_paper"
+
 The underlying metabolic model is based on a curated reduced model of human metabolism, see: Masid M, Ataman M & Hatzimanikatis V (2020) Analysis of human metabolism by reducing the complexity of the genome-scale models using redHUMAN. Nat Commun 11: 2821 https://www.nature.com/articles/s41467-020-16549-2#Tab1
 
 The scripts to process the redHuman model into the oCEan format can be found here: https://github.com/saezlab/redHuman_models
