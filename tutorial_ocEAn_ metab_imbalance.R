@@ -67,8 +67,15 @@ data(expressed_genes)
 all_pathways <- unique(recon2_redhuman$pathway)
 sub_network <- model_to_pathway_sif(pathway_to_keep = all_pathways$X1)
 
+#some formating of the network is required, especially to make 
+#the method easier to run and the results easier to interpret
+
+#This step simply translate the gene IDs in the enzyme complexes into gene symboles
 sub_network <- translate_complexes(sub_network)
 
+#Co-factors are removed. since we are aiming to follow metabolic routes 
+#in the metabolic reaction network, it is crucial to remove over-promiscuous 
+#metabolites that create unnecessary complexity in the network
 sub_network_nocofact <- remove_cofactors(sub_network)
 
 #Filter out any gene that isn't expressed from the metabolic network
