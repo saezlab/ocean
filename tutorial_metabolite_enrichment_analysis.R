@@ -34,7 +34,7 @@ all_pathways <- as.vector(unique(recon2_redhuman$pathway))
 all_pathways <- all_pathways[!is.na(all_pathways)] 
 
 ##Create a reaction network from the recon_redhuman model (metabolites & enzymes)
-reaction_network <- model_to_pathway_sif(pathway_to_keep = all_pathways)
+reaction_network <- model_to_pathway_sif(pathway_to_keep = all_pathways$X1)
 
 ##Translate enzyme complexes by mapping identifiers to names
 reaction_network <- translate_complexes(reaction_network)
@@ -62,7 +62,7 @@ metabolites_pathway_df <- map_pathways_to_metabolites(metabolites)
 ##Prepare input data
 network <- metabolites_pathway_df    #input 1: pathways and their associated metabolites
 network$mor <- 1                     #add new column for mode of regulation
-network$likelihood <- 1              #add new column for edge likelihood
+# network$likelihood <- 1              #add new column for edge likelihood
 
 t_table_kegg <- t_table
 t_table_kegg$KEGG <- get_pure_kegg_ids(t_table_kegg$KEGG) #remove compartment info
@@ -77,8 +77,8 @@ enrichment <- run_wmean(mat, network,
                           .source = .data$pathway,
                           .target = .data$metabolites,
                           .mor = .data$mor, 
-                          .likelihood = .data$likelihood,  
-                       times = 100)  #randomize matrix
+                          # .likelihood = .data$likelihood,  
+                       times = 1000, minsize = 5)  #randomize matrix
 
 enrichment$condition <- NULL
 enrichment <- as.data.frame(enrichment)
