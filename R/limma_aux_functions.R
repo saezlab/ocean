@@ -147,10 +147,13 @@ runLimma <- function(measurements, targets, comparisons = NULL, regress_out = NU
 
 #' ttop_list_to_t_table
 #'
-#' ipsum...
+#' This function converts a list of limma top table results into a single 
+#' dataframe of t-values. The list of top table results can be obtained using 
+#' the limma_res_to_ttop_list function
+#' 
 #'
-#' @param ttop_list  ipsum...
-#' @return ipsum...
+#' @param ttop_list  list of limma top table results obtained from limma_res_to_ttop_list
+#' @return data.frame of t-values, where columns are the contrasts and rows are the omic features tested
 #' @export
 ttop_list_to_t_table <- function(ttop_list)
 {
@@ -175,10 +178,10 @@ ttop_list_to_t_table <- function(ttop_list)
 
 #' ttop_list_to_log2FC_table
 #'
-#' ipsum...
+#' same as ttop_list_to_t_table, but with log2FC instead of t-values
 #'
-#' @param ttop_list  ipsum...
-#' @return ipsum...
+#' @param ttop_list  list of limma top table results obtained from limma_res_to_ttop_list
+#' @return data.frame of t-values, where columns are the contrasts and rows are the omic features tested
 #' @export
 ttop_list_to_log2FC_table <- function(ttop_list)
 {
@@ -203,13 +206,15 @@ ttop_list_to_log2FC_table <- function(ttop_list)
 
 #' limma_res_to_ttop_list
 #'
-#' ipsum...
+#' This function converts the output of the runLimma function into a list of
+#' limma top tables
 #'
-#' @param limma_res  ipsum...
-#' @param comp_names  ipsum...
-#' @param number  ipsum...
-#' @param adjust.method  ipsum...
-#' @return ipsum...
+#' @param limma_res  output of the runLimma function
+#' @param comp_names  identifiers of the contrasts that were considered in the 
+#' runLimma function
+#' @param number  number of top features to be included in the top table results
+#' @param adjust.method  method to adjust p-values, same as for the topTable limma function
+#' @return a list of limma top table results
 #' @export
 limma_res_to_ttop_list <- function(limma_res, comp_names, number, adjust.method = "fdr")
 {
@@ -226,7 +231,8 @@ limma_res_to_ttop_list <- function(limma_res, comp_names, number, adjust.method 
 
 #' t_table_metactivity_input_formater
 #'
-#' ipsum...
+#' This function allows to format a table of t-values (or log2FCs) into the input
+#' for the 
 #'
 #' @param metabolomic_t_table  ipsum...
 #' @param mapping_table  ipsum...
