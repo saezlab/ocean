@@ -7,11 +7,11 @@
 ttop_list_to_log2FC_table(ttop_list)
 }
 \arguments{
-\item{ttop_list}{ipsum...}
+\item{ttop_list}{list of limma top table results obtained from limma_res_to_ttop_list}
 }
 \value{
-ipsum...
+data.frame of t-values, where columns are the contrasts and rows are the omic features tested
 }
 \description{
-ipsum...
+same as ttop_list_to_t_table, but with log2FC instead of t-values
 }

@@ -231,13 +231,19 @@ limma_res_to_ttop_list <- function(limma_res, comp_names, number, adjust.method 
 
 #' t_table_metactivity_input_formater
 #'
-#' This function allows to format a table of t-values (or log2FCs) into the input
-#' for the 
+#' This function allows to format a table of t-values (or log2FCs) for the 
+#' metactivity function. Essentially, it adds a compartment code (using BIGG
+#' nomenclature) at the end of each metabolite identifier, so that they can be 
+#' mapped on the compartmentalized reaction prior knowledge network.
 #'
-#' @param metabolomic_t_table  ipsum...
-#' @param mapping_table  ipsum...
-#' @param affixes  ipsum...
-#' @return ipsum...
+#' @param metabolomic_t_table  the metabolomic t-table (or log2FC table) that 
+#' is returned by ttop_list_to_t_table (or ttop_list_to_log2FC_table)
+#' @param mapping_table  a mapping table to translate the metabolite 
+#' identifiers of the t-table into KEGG IDs
+#' @param affixes  a character vectors corresponding to the compartment affixes
+#' to be considered. If you wish to only focus on one compartment, 
+#' e.g. mitochondria, you can input only c("m") for example.
+#' @return a formatted t-table (or log2FC table) for use with the metactivity function
 #' @export
 t_table_metactivity_input_formater <- function(metabolomic_t_table, mapping_table, affixes = c("c","l","x","m","e","n","r"))
 {

@@ -11,15 +11,22 @@ t_table_metactivity_input_formater(
 )
 }
 \arguments{
-\item{metabolomic_t_table}{ipsum...}
+\item{metabolomic_t_table}{the metabolomic t-table (or log2FC table) that 
+is returned by ttop_list_to_t_table (or ttop_list_to_log2FC_table)}
 
-\item{mapping_table}{ipsum...}
+\item{mapping_table}{a mapping table to translate the metabolite 
+identifiers of the t-table into KEGG IDs}
 
-\item{affixes}{ipsum...}
+\item{affixes}{a character vectors corresponding to the compartment affixes
+to be considered. If you wish to only focus on one compartment, 
+e.g. mitochondria, you can input only c("m") for example.}
 }
 \value{
-ipsum...
+a formatted t-table (or log2FC table) for use with the metactivity function
 }
 \description{
-ipsum...
+This function allows to format a table of t-values (or log2FCs) for the 
+metactivity function. Essentially, it adds a compartment code (using BIGG
+nomenclature) at the end of each metabolite identifier, so that they can be 
+mapped on the compartmentalized reaction prior knowledge network.
 }

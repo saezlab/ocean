@@ -7,12 +7,14 @@
 remove_cofactors(reaction_network, compound_list = kegg_compounds)
 }
 \arguments{
-\item{reaction_network}{ipsum...}
+\item{reaction_network}{reaction network in SIF format, 
+like the one returned by model_to_pathway_sif}
 
 \item{compound_list}{KEGGREST coumpound list}
 }
 \value{
-ipsum...
+reaction network in SIF format and the corresponding 
+attribute dataframe
 }
 \description{
 This function removes cofactors from reaction networks generate by the model_to_pathway_sif function

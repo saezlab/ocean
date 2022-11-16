@@ -1,17 +1,20 @@
 #'\code{model_to_pathway_sif}
 #'
-#' This function generate a subreaction network in sif format from the recon_redhuman model for a given set of pathways
+#' This function generate a subreaction network in sif format from the 
+#' recon_redhuman model for a given set of pathways
 #'
-#' @param pathway_to_keep  ipsum...
-#' @param pathways ipsum...
-#' @param rxns ipsum...
-#' @param rules ipsum...
-#' @param minmax ipsum...
-#' @param stochio ipsum...
-#' @param metab ipsum...
-#' @param mapping ipsum...
-#' @param recon1_metabolites ipsum...
-#' @return ipsum...
+#' @param pathway_to_keep  character vector with the ID of the pathways that 
+#' should be used to build the SIF reaction network. 
+#' Use "View(unique(recon2_redhuman$pathway))" to see available pathway IDs
+#' @param pathways pathway corresponding to redhuman reaction indexes
+#' @param rxns reaction IDs corresponding to redhuman reaction indexes
+#' @param rules gene rules corresponding to redhuman reaction indexes
+#' @param minmax min max flux boundaries corresponding to redhuman reaction indexes
+#' @param stochio redhuman stochiometric matrix
+#' @param metab metabolite IDs corresponding to redhuman metabolite indexes
+#' @param mapping obsolete
+#' @param recon1_metabolites obsolete
+#' @return a subreaction network in sif format
 #' @export
 
 model_to_pathway_sif <- function(pathway_to_keep, 
@@ -112,9 +115,11 @@ model_to_pathway_sif <- function(pathway_to_keep,
 #'
 #' This function removes cofactors from reaction networks generate by the model_to_pathway_sif function
 #'
-#' @param reaction_network  ipsum...
+#' @param reaction_network  reaction network in SIF format, 
+#' like the one returned by model_to_pathway_sif
 #' @param compound_list KEGGREST coumpound list
-#' @return ipsum...
+#' @return reaction network in SIF format and the corresponding 
+#' attribute dataframe
 #' @export
 remove_cofactors <- function(reaction_network, compound_list = kegg_compounds)
 {

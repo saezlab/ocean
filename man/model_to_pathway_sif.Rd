@@ -17,27 +17,30 @@ model_to_pathway_sif(
 )
 }
 \arguments{
-\item{pathway_to_keep}{ipsum...}
+\item{pathway_to_keep}{character vector with the ID of the pathways that 
+should be used to build the SIF reaction network. 
+Use "View(unique(recon2_redhuman$pathway))" to see available pathway IDs}
 
-\item{pathways}{ipsum...}
+\item{pathways}{pathway corresponding to redhuman reaction indexes}
 
-\item{rxns}{ipsum...}
+\item{rxns}{reaction IDs corresponding to redhuman reaction indexes}
 
-\item{rules}{ipsum...}
+\item{rules}{gene rules corresponding to redhuman reaction indexes}
 
-\item{minmax}{ipsum...}
+\item{minmax}{min max flux boundaries corresponding to redhuman reaction indexes}
 
-\item{stochio}{ipsum...}
+\item{stochio}{redhuman stochiometric matrix}
 
-\item{metab}{ipsum...}
+\item{metab}{metabolite IDs corresponding to redhuman metabolite indexes}
 
-\item{mapping}{ipsum...}
+\item{mapping}{obsolete}
 
-\item{recon1_metabolites}{ipsum...}
+\item{recon1_metabolites}{obsolete}
 }
 \value{
-ipsum...
+a subreaction network in sif format
 }
 \description{
-This function generate a subreaction network in sif format from the recon_redhuman model for a given set of pathways
+This function generate a subreaction network in sif format from the 
+recon_redhuman model for a given set of pathways
 }

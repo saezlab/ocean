@@ -7,11 +7,13 @@
 ttop_list_to_t_table(ttop_list)
 }
 \arguments{
-\item{ttop_list}{ipsum...}
+\item{ttop_list}{list of limma top table results obtained from limma_res_to_ttop_list}
 }
 \value{
-ipsum...
+data.frame of t-values, where columns are the contrasts and rows are the omic features tested
 }
 \description{
-ipsum...
+This function converts a list of limma top table results into a single 
+dataframe of t-values. The list of top table results can be obtained using 
+the limma_res_to_ttop_list function
 }

@@ -7,17 +7,19 @@
 limma_res_to_ttop_list(limma_res, comp_names, number, adjust.method = "fdr")
 }
 \arguments{
-\item{limma_res}{ipsum...}
+\item{limma_res}{output of the runLimma function}
 
-\item{comp_names}{ipsum...}
+\item{comp_names}{identifiers of the contrasts that were considered in the 
+runLimma function}
 
-\item{number}{ipsum...}
+\item{number}{number of top features to be included in the top table results}
 
-\item{adjust.method}{ipsum...}
+\item{adjust.method}{method to adjust p-values, same as for the topTable limma function}
 }
 \value{
-ipsum...
+a list of limma top table results
 }
 \description{
-ipsum...
+This function converts the output of the runLimma function into a list of
+limma top tables
 }
