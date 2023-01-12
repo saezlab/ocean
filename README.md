@@ -1,5 +1,4 @@
-# ocean
-R package for metabolic enzyme enrichment anaylsis
+# ocean: an R package for metabolic enzyme enrichment anaylsis
 
 ![](https://github.com/saezlab/ocean/blob/master/ocean_logo.001.png?raw=true)
 
