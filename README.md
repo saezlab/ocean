@@ -24,10 +24,12 @@ install.packages("BiocManager")
 remotes::install_github("saezlab/ocean", repos = BiocManager::repositories())
 ```
 
-You can then run the tutorial scripts with a kidney cancer toy metabolomic dataset: https://github.com/saezlab/ocean/blob/master/tutorial_ocEAn_ metab_imbalance.R
+You can then run the tutorial scripts with a kidney cancer toy metabolomic dataset: https://github.com/saezlab/ocean/blob/master/tutorial_ocEAn.R
 
 PLEASE READ THE TUTORIAL CAREFULLY :) and do not hesitate to have an extensive look at all the variable in it 
 and what information they contain.
+
+A new updated tutorial that showcase how ocean results can be used in parallel with proteomic data will be comming soon !
 
 ## Citations
 
