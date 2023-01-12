@@ -23,7 +23,7 @@ are used to explore coordinated deregulations of metabolite abundances
 with respect to their position relative to metabolic enzymes.
 This is similar to Kinase-substrate and TF-targets enrichment analyses.
 
-## install ocEAn
+## Install ocEAn
 
 ```
 library(devtools)
