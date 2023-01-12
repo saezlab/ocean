@@ -31,7 +31,7 @@ and what information they contain.
 
 ## Citations
 
-ocEAn pre-print: Sciacovelli, Dugourd et al. Nitrogen partitioning between branched-chain amino acids and urea cycle enzymes sustains renal cancer progression; 2021 https://www.biorxiv.org/content/10.1101/2021.09.17.460635v1.full
+ocEAn manuscript: Sciacovelli, Dugourd et al. Nitrogen partitioning between branched-chain amino acids and urea cycle enzymes sustains renal cancer progression; 2022 https://pubmed.ncbi.nlm.nih.gov/36539415/
 
 To reproduce the result of this manuscript, install ocEAn from the branch "marco_paper"
 
