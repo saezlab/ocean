@@ -26,7 +26,7 @@ jobs:
 
       - name: Install package
         run: |
-          sudo apt-get install -y libcurl4 libcurl4-openssl-dev
+          sudo apt-get install -y libcurl4 libcurl4-openssl-dev libglpk-dev
           Rscript -e 'install.packages(c("pkgdown", "remotes", "BiocManager", "curl"))'
           Rscript - << EOF
             library(remotes)
