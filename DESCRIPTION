@@ -11,6 +11,8 @@ Authors@R: c(
 Maintainer: Aurelien Dugourd <dugourdaurelien@gmail.com>
 Description: metabolic enzyme enrichment analysis
     Based on the model of TF and kinase activity estimation
+URL: https://saezlab.github.io/ocean/
+BugReports: https://github.com/saezlab/ocean/issues
 Depends: R (>= 3.6)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
