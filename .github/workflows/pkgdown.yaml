@@ -26,7 +26,8 @@ jobs:
 
       - name: Install package
         run: |
-          Rscript -e 'install.packages(c("pkgdown", "remotes"))'
+          Rscript -e 'install.packages(c("pkgdown", "remotes", "BiocManager", "curl"))'
+          Rscript -e 'BiocManager::install("limma")'
           R CMD build .
           Rscript -e 'remotes::install_local("ocean_0.1.0.tar.gz", dependencies = TRUE)'
 
