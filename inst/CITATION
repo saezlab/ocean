@@ -1,18 +1,34 @@
 citEntry(
     entry="Article",
     author = c(
-        person("Denes", "Turei"),
-        person("Alberto", "Valdeolivas"),
-        person("Lejla", "Gul"),
-        person("Nicolas", "Palacio-Escat"),
-        person("Michal", "Klein"),
-        person("Olga", "Ivanova"),
-        person("Marton", "Olbei"),
-        person("Attila", "Gabor"),
-        person("Fabian", "Theis"),
-        person("Dezso", "Modos"),
-        person("Tamas", " Korcsmaros"),
-        person("Julio", "Saez-Rodriguez")
+        person("Sciacovelli", "Marco"),
+        person("Dugourd", "Aurelien"),
+        person("Jimenez", "Lorea Valcarcel"),
+        person("Yang", "Ming"),
+        person("Nikitopoulou", "Efterpi"),
+        person("Costa", "Ana S H"),
+        person("Tronci", "Laura"),
+        person("Caraffini", "Veronica"),
+        person("Rodrigues", "Paulo"),
+        person("Schmidt", "Christina"),
+        person("Ryan", "Dylan Gerard"),
+        person("Young", "Timothy"),
+        person("Zecchini", "Vincent R"),
+        person("Rossi", "Sabrina H"),
+        person("Massie", "Charlie"),
+        person("Lohoff", "Caroline"),
+        person("Masid", "Maria"),
+        person("Hatzimanikatis", "Vassily"),
+        person("Kuppe", "Christoph"),
+        person("Von Kriegsheim", "Alex"),
+        person("Kramann", "Rafael"),
+        person("Gnanapragasam", "Vincent"),
+        person("Warren", "Anne Y"),
+        person("Stewart", "Grant D"),
+        person("Erez", "Ayelet"),
+        person("Vanharanta", "Sakari"),
+        person("Saez-Rodriguez", "Julio"),
+        person("Frezza", "Christian")
     ),
     title = "Dynamic partitioning of branched-chain amino acids-derived nitrogen supports renal cancer progression",
     journal = "Nature communications",
@@ -26,5 +42,5 @@ citEntry(
         S Vanharanta, J Saez-Rodriguez, C Frezza (2022) Dynamic partitioning
         of branched-chain amino acids-derived nitrogen supports renal cancer
         progression. Nature communications 13(1):7830;
-        DOI: 10.1038/s41467-022-35036-4},
+        DOI: 10.1038/s41467-022-35036-4",
 )
