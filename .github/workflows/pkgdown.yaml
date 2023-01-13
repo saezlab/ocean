@@ -32,7 +32,7 @@ jobs:
             library(remotes)
             library(BiocManager)
             sapply(
-              system_requirements(os = "ubuntu", os_release = "22.04"),
+              system_requirements(os = "ubuntu", os_release = "20.04"),
               function(cmd){system(paste("sudo", cmd))}
             )
             install_deps(
