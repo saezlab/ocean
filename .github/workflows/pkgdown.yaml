@@ -24,24 +24,9 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install package
-        run: |
-          sudo apt-get install -y libcurl4 libcurl4-openssl-dev libglpk-dev
-          Rscript -e 'install.packages(c("pkgdown", "remotes", "BiocManager", "curl"))'
-          Rscript - << EOF
-            library(remotes)
-            library(BiocManager)
-            sapply(
-              system_requirements(os = "ubuntu", os_release = "20.04"),
-              function(cmd){system(paste("sudo", cmd))}
-            )
-            install_deps(
-              dependencies = TRUE,
-              repos = BiocManager::repositories(),
-              upgrade = "always"
-            )
-          EOF
-          R CMD INSTALL .
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown, local::.
 
       - name: Deploy package
         run: |
