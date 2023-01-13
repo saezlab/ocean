@@ -95,7 +95,7 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The functional insights that metabolomic data sets contain currently lies under-exploited. This is in part due to the complexity of metabolic reaction networks and the indirect relationship between reaction fluxes and metabolite abundance. Yet, footprint-based methods have been available for decades in the context of other omic data sets such as transcriptomic and phosphoproteomic. Here, we present ocEAn, a method that defines metabolic enzyme footprint from a curated reduced version of the recon2 reaction network and use them to explore coordinated deregulations of metabolite abundances with respect to their position relative to metabolic enzymes in the same manner as Kinase-substrate and TF-targets Enrichment analysis. This picture diplays the TCA cycle with deregulated metabolites and estimated metabolic enzyme deregulations in kidney cancer. You can generate a dynamic visualisation of this network and other pathways by following our tutorial: <a href="https://github.com/saezlab/ocean/blob/master/vignettes/tutorial_ocEAn.R" class="external-link">https://github.com/saezlab/ocean/blob/master/tutorial_ocEAn.R</a></p>
+<p>The functional insights that metabolomic data sets contain currently lies under-exploited. This is in part due to the complexity of metabolic reaction networks and the indirect relationship between reaction fluxes and metabolite abundance. Yet, footprint-based methods have been available for decades in the context of other omic data sets such as transcriptomic and phosphoproteomic. Here, we present ocEAn, a method that defines metabolic enzyme footprint from a curated reduced version of the recon2 reaction network and use them to explore coordinated deregulations of metabolite abundances with respect to their position relative to metabolic enzymes in the same manner as Kinase-substrate and TF-targets Enrichment analysis. This picture diplays the TCA cycle with deregulated metabolites and estimated metabolic enzyme deregulations in kidney cancer. You can generate a dynamic visualisation of this network and other pathways by following <a href="https://saezlab.github.io/ocean/articles/ocean_intro.html" class="external-link">our tutorial</a>.</p>
 <div class="figure">
 <img src="https://github.com/saezlab/ocean/blob/master/man/figures/Summary.png?raw=true" alt=""><p class="caption">Workflow</p>
 </div>
@@ -114,15 +114,15 @@
 <span></span>
 <span><span class="co">## instal ocean</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"saezlab/ocean"</span>, repos <span class="op">=</span> <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">repositories</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>You can then run the tutorial scripts with a kidney cancer toy metabolomic dataset: <a href="https://github.com/saezlab/ocean/blob/master/vignettes/tutorial_ocEAn.R" class="external-link">https://github.com/saezlab/ocean/blob/master/tutorial_ocEAn.R</a></p>
+<p>You can then run the <a href="https://saezlab.github.io/ocean/articles/ocean_intro.html" class="external-link">tutorial scripts</a> with a kidney cancer toy metabolomic dataset.</p>
 <p>PLEASE READ THE TUTORIAL CAREFULLY :) and do not hesitate to have an extensive look at all the variable in it and what information they contain.</p>
-<p>A new updated tutorial that showcase how ocean results can be used in parallel with proteomic data will be comming soon !</p>
+<p>A new updated tutorial that showcase how ocean results can be used in parallel with proteomic data will be comming soon!</p>
 </div>
 <div class="section level2">
 <h2 id="citations">Citations<a class="anchor" aria-label="anchor" href="#citations"></a>
 </h2>
 <p>ocEAn manuscript: Sciacovelli, Dugourd et al. Nitrogen partitioning between branched-chain amino acids and urea cycle enzymes sustains renal cancer progression; 2022 <a href="https://pubmed.ncbi.nlm.nih.gov/36539415/" class="external-link uri">https://pubmed.ncbi.nlm.nih.gov/36539415/</a></p>
-<p>To reproduce the result of this manuscript, install ocEAn from the branch “marco_paper”</p>
+<p>To reproduce the result of this manuscript, install ocEAn from the branch “marco_paper”.</p>
 <p>The underlying metabolic model is based on a curated reduced model of human metabolism, see: Masid M, Ataman M &amp; Hatzimanikatis V (2020) Analysis of human metabolism by reducing the complexity of the genome-scale models using redHUMAN. Nat Commun 11: 2821 <a href="https://www.nature.com/articles/s41467-020-16549-2#Tab1" class="external-link uri">https://www.nature.com/articles/s41467-020-16549-2#Tab1</a></p>
 <p>The scripts to process the redHuman model into the oCEan format can be found here: <a href="https://github.com/saezlab/redHuman_models" class="external-link uri">https://github.com/saezlab/redHuman_models</a></p>
 </div>
