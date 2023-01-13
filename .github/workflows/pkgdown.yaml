@@ -26,8 +26,10 @@ jobs:
 
       - name: Install package
         run: |
-          R CMD INSTALL .
-          Rscript -e 'install.packages("pkgdown")'
+          Rscript -e 'install.packages(c("pkgdown", "remotes"))'
+          R CMD build .
+          Rscript -e 'remotes::install_local("ocean_0.1.0.tar.gz", dependencies = TRUE)'
+
 
       - name: Deploy package
         run: |
