@@ -26,8 +26,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: pkgdown
-          needs: website
+          extra-packages: any::pkgdown, local::.
 
       - name: Deploy package
         run: |
