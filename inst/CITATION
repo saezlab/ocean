@@ -1,0 +1,30 @@
+citEntry(
+    entry="Article",
+    author = c(
+        person("Denes", "Turei"),
+        person("Alberto", "Valdeolivas"),
+        person("Lejla", "Gul"),
+        person("Nicolas", "Palacio-Escat"),
+        person("Michal", "Klein"),
+        person("Olga", "Ivanova"),
+        person("Marton", "Olbei"),
+        person("Attila", "Gabor"),
+        person("Fabian", "Theis"),
+        person("Dezso", "Modos"),
+        person("Tamas", " Korcsmaros"),
+        person("Julio", "Saez-Rodriguez")
+    ),
+    title = "Dynamic partitioning of branched-chain amino acids-derived nitrogen supports renal cancer progression",
+    journal = "Nature communications",
+    year = 2022,
+    doi = "10.1038/s41467-022-35036-4",
+    textVersion = "M Sciacovelli, A Dugourd, LV Jimenez, M Yang,
+        E Nikitopoulou, ASH Costa, L Tronci, V Caraffini, P Rodrigues,
+        C Schmidt, DG Ryan, T Young, VR Zecchini, SH Rossi, C Massie,
+        C Lohoff, M Masid, V Hatzimanikatis, C Kuppe, A Von Kriegsheim,
+        R Kramann, V Gnanapragasam, AY Warren, GD Stewart, A Erez,
+        S Vanharanta, J Saez-Rodriguez, C Frezza (2022) Dynamic partitioning
+        of branched-chain amino acids-derived nitrogen supports renal cancer
+        progression. Nature communications 13(1):7830;
+        DOI: 10.1038/s41467-022-35036-4},
+)
