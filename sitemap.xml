@@ -34,6 +34,9 @@
     <loc>/reference/condense_metabolite_set.html</loc>
   </url>
   <url>
+    <loc>/reference/expressed_genes.html</loc>
+  </url>
+  <url>
     <loc>/reference/forestMaker.html</loc>
   </url>
   <url>
@@ -62,6 +65,9 @@
   </url>
   <url>
     <loc>/reference/map_pathways_to_metabolites.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mapping_table.html</loc>
   </url>
   <url>
     <loc>/reference/metactivity.html</loc>
@@ -95,6 +101,9 @@
   </url>
   <url>
     <loc>/reference/rearrange_dataframe.html</loc>
+  </url>
+  <url>
+    <loc>/reference/recon2_redhuman.html</loc>
   </url>
   <url>
     <loc>/reference/remove_cofactors.html</loc>
