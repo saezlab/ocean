@@ -1,138 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/metabolic_pathway_enrichment.html</loc>
-  </url>
-  <url>
-    <loc>/articles/ocean_intro.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/buildTree.html</loc>
-  </url>
-  <url>
-    <loc>/reference/checkInputs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compress_transporters.html</loc>
-  </url>
-  <url>
-    <loc>/reference/condense_metabolite_set.html</loc>
-  </url>
-  <url>
-    <loc>/reference/expressed_genes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/forestMaker.html</loc>
-  </url>
-  <url>
-    <loc>/reference/generate_sifAtt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_pure_kegg_ids.html</loc>
-  </url>
-  <url>
-    <loc>/reference/hello.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/limma_res_to_ttop_list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/makeContrastsAlt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/make_df_and_targets_great_again.html</loc>
-  </url>
-  <url>
-    <loc>/reference/make_discrete_palette.html</loc>
-  </url>
-  <url>
-    <loc>/reference/map_pathways_to_metabolites.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mapping_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/metactivity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/model_to_pathway_sif.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nicePCA.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nitrogen_tracking.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pathway_HM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plotMetaboliteContribution.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_reaction_network.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_significant_pathways.html</loc>
-  </url>
-  <url>
-    <loc>/reference/prepare_metabolite_set.html</loc>
-  </url>
-  <url>
-    <loc>/reference/prepare_regulon_df.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rearrange_dataframe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/recon2_redhuman.html</loc>
-  </url>
-  <url>
-    <loc>/reference/remove_cofactors.html</loc>
-  </url>
-  <url>
-    <loc>/reference/runLimma.html</loc>
-  </url>
-  <url>
-    <loc>/reference/split_transaminases.html</loc>
-  </url>
-  <url>
-    <loc>/reference/t_table_metactivity_input_formater.html</loc>
-  </url>
-  <url>
-    <loc>/reference/target_set_from_forest_2.html</loc>
-  </url>
-  <url>
-    <loc>/reference/translate_complexes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/translate_results.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ttopFormatter.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ttop_list_to_log2FC_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ttop_list_to_t_table.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/metabolic_pathway_enrichment.html</loc></url>
+<url><loc>/articles/ocean_intro.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/buildTree.html</loc></url>
+<url><loc>/reference/checkInputs.html</loc></url>
+<url><loc>/reference/compress_transporters.html</loc></url>
+<url><loc>/reference/condense_metabolite_set.html</loc></url>
+<url><loc>/reference/expressed_genes.html</loc></url>
+<url><loc>/reference/forestMaker.html</loc></url>
+<url><loc>/reference/generate_sifAtt.html</loc></url>
+<url><loc>/reference/get_pure_kegg_ids.html</loc></url>
+<url><loc>/reference/hello.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/limma_res_to_ttop_list.html</loc></url>
+<url><loc>/reference/makeContrastsAlt.html</loc></url>
+<url><loc>/reference/make_df_and_targets_great_again.html</loc></url>
+<url><loc>/reference/make_discrete_palette.html</loc></url>
+<url><loc>/reference/map_pathways_to_metabolites.html</loc></url>
+<url><loc>/reference/mapping_table.html</loc></url>
+<url><loc>/reference/metactivity.html</loc></url>
+<url><loc>/reference/model_to_pathway_sif.html</loc></url>
+<url><loc>/reference/nicePCA.html</loc></url>
+<url><loc>/reference/nitrogen_tracking.html</loc></url>
+<url><loc>/reference/pathway_HM.html</loc></url>
+<url><loc>/reference/plotMetaboliteContribution.html</loc></url>
+<url><loc>/reference/plot_reaction_network.html</loc></url>
+<url><loc>/reference/plot_significant_pathways.html</loc></url>
+<url><loc>/reference/prepare_metabolite_set.html</loc></url>
+<url><loc>/reference/prepare_regulon_df.html</loc></url>
+<url><loc>/reference/rearrange_dataframe.html</loc></url>
+<url><loc>/reference/recon2_redhuman.html</loc></url>
+<url><loc>/reference/remove_cofactors.html</loc></url>
+<url><loc>/reference/runLimma.html</loc></url>
+<url><loc>/reference/split_transaminases.html</loc></url>
+<url><loc>/reference/t_table_metactivity_input_formater.html</loc></url>
+<url><loc>/reference/target_set_from_forest_2.html</loc></url>
+<url><loc>/reference/translate_complexes.html</loc></url>
+<url><loc>/reference/translate_results.html</loc></url>
+<url><loc>/reference/ttopFormatter.html</loc></url>
+<url><loc>/reference/ttop_list_to_log2FC_table.html</loc></url>
+<url><loc>/reference/ttop_list_to_t_table.html</loc></url>
 </urlset>
+
