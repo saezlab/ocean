@@ -40,6 +40,8 @@ You can then run the
 [tutorial scripts](https://saezlab.github.io/ocean/articles/ocean_intro.html)
 with a kidney cancer toy metabolomic dataset.
 
+you can find a lightweight tutorial R script [here](https://github.com/saezlab/ocean/blob/master/vignettes/tutorial_ocEAn.R) 
+
 PLEASE READ THE TUTORIAL CAREFULLY :) and do not hesitate to have an extensive
 look at all the variable in it and what information they contain.
 
