@@ -101,13 +101,12 @@ buildTree <- function(root, graph, remove_reverse = F)
 #' @importFrom parallel detectCores
 #' @importFrom parallel mclapply
 #' @export
-forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1), remove_reverse = F)
+forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1), remove_reverse = F, parallel_mcl = F)
 {
   graph <- graph_from_data_frame(d = reaction_network[, c(1, 2)], directed = TRUE)
   
-  if(.Platform$OS.type == "windows")
+  if(parallel_mcl)
   {
-    print("Sadly, windows does not support mcl parallelisation. Setting conversion on a single CPU.")
     ncores <- 1
   } else
   {
@@ -133,12 +132,52 @@ forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1)
       print(i)
       molecule_names_run_i <- molecule_names[breaks[i]:(breaks[i+1]-1)]
       print(molecule_names_run_i)
-      splitted_forest[[i]] <- mclapply(molecule_names_run_i, buildTree, graph, remove_reverse, mc.cores = ncores)
+      if(.Platform$OS.type == "windows")
+      {
+        # Initialize the cluster with the desired number of cores
+        cl <- makeCluster(ncores) # You can set ncores as required, like detectCores() or another integer
+        
+        # Load any necessary libraries on each worker in the cluster
+        clusterEvalQ(cl, library(sf))
+        
+        # Export required objects to each cluster node if necessary
+        clusterExport(cl, c("graph", "remove_reverse"), envir = environment())
+        
+        # Run the parLapply function
+        splitted_forest[[i]] <- parLapply(cl, molecule_names_run_i, buildTree, graph, remove_reverse)
+        
+        # Stop the cluster after use
+        stopCluster(cl)
+      } else
+      {
+        splitted_forest[[i]] <- mclapply(molecule_names_run_i, buildTree, graph, remove_reverse, mc.cores = ncores)
+      }
+      
     }
     
     molecule_names_run_i <- molecule_names[breaks[nruns]:length(molecule_names)]
     print(molecule_names_run_i)
-    splitted_forest[[nruns]] <- mclapply(molecule_names_run_i, buildTree, graph, remove_reverse, mc.cores = ncores)
+    if(.Platform$OS.type == "windows")
+    {
+      # Initialize the cluster with the desired number of cores
+      cl <- makeCluster(ncores) # You can set ncores as required, like detectCores() or another integer
+      
+      # Load any necessary libraries on each worker in the cluster
+      clusterEvalQ(cl, library(sf))
+      
+      # Export required objects to each cluster node if necessary
+      clusterExport(cl, c("graph", "remove_reverse"), envir = environment())
+      
+      # Run the parLapply function
+      splitted_forest[[nruns]] <- parLapply(cl, molecule_names_run_i, buildTree, graph, remove_reverse)
+      
+      # Stop the cluster after use
+      stopCluster(cl)
+    } else
+    {
+      splitted_forest[[nruns]] <- mclapply(molecule_names_run_i, buildTree, graph, remove_reverse, mc.cores = ncores)
+    }
+
     
     forest <- do.call(c, splitted_forest)
   }
