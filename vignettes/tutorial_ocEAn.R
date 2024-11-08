@@ -103,7 +103,10 @@ enzymes <- unique(sub_network_nocofact$attributes$V1)
 enzymes <- enzymes[!grepl("_[clxmenr]$",enzymes)]
 
 #Convert the network into a forest (list of enzymes (trees) with correspoding metabolic signatures (branches))
-sub_forest <- forestMaker(enzymes, sub_network_nocofact$reaction_network, branch_length = c(1,1), remove_reverse = T)
+sub_forest <- forestMaker(enzymes, sub_network_nocofact$reaction_network, 
+                          branch_length = c(1,1), 
+                          remove_reverse = T, 
+                          parallel_mcl = T)
 
 ###################
 ##Prepare the metabolic enzyme sets
