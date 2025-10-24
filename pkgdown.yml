@@ -1,7 +1,7 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   metabolic_pathway_enrichment: metabolic_pathway_enrichment.html
   ocean_intro: ocean_intro.html
-last_built: 2024-11-08T13:00Z
+last_built: 2025-10-24T14:15Z
