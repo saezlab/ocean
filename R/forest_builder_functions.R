@@ -107,10 +107,10 @@ forestMaker <- function(molecule_names, reaction_network, branch_length = c(1,1)
   
   if(parallel_mcl)
   {
-    ncores <- 1
+    ncores <- min(c(1000,detectCores()-1))
   } else
   {
-    ncores <- min(c(1000,detectCores()-1))
+    ncores <- 1
   }
 
   
